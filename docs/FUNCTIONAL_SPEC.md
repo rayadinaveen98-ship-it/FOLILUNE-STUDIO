@@ -6,6 +6,8 @@ Owner defines/approves a creative brief (or authorizes a bounded production queu
 
 **Priority correction:** Automated generation and orchestration are not optional later enhancements; they are FOLILUNE Studio's primary value proposition. Existing manual authoring features provide an oversight/repair interface and infrastructure. The first engine MVP is a multi-section, end-to-end generated original short story with an auditable revision trail and experimental EPUB for owner review; Reader publication is gated separately.
 
+Owner review culminates in either **Approve & Publish** (one explicit authenticated user action that approves the exact candidate and, after all release checks, automatically promotes it) or **Approve for later** (retains approval but does not publish). The approval record, release authorization, validation and catalog promotion remain auditable, distinct logical operations even when the user initiates them through one button.
+
 ## Autonomous production capabilities — primary scope
 - Brief setup: genre, language, audience, length/format, creative constraints, preferred output, model/provider and maximum spend; a clearly visible Start production action.
 - Orchestration: stages for outline, Story Bible, complete drafts, editorial critique and revision, format-specific artwork/lettering, QA and export; status, resumability, bounded retries and failure diagnostics.

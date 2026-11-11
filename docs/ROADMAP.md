@@ -1,3 +1,15 @@
+# Roadmap Index — Superseded Historical Prototypes
+
+**MASTER ROADMAP AS OF 2026-11-11:** [DELIVERY_ROADMAP_MASTER.md](DELIVERY_ROADMAP_MASTER.md)
+
+**Critical status correction:** Studio v0.4 is a PRIVATE LOCAL prototype, tested mainly with synthetic generation and requiring externally installed Ollama for actual AI text. It has NO daily production scheduler running in the cloud, NO finished-novel/comic/art generator, NO public approval service and NO Reader publishing. Older dates/stages below are implementation history, not authorization to mark the product ready. The authoritative direction is to create a fully managed owner-simple autonomous publishing system, targeting 10 complete short-story **candidates** per day after QA, with other formats on their own production cadences.
+
+Read the [Master Product Plan](MASTER_PRODUCT_PLAN.md), [Platform Architecture](ENGINE_PLATFORM_ARCHITECTURE.md), [Editorial Quality Gates](EDITORIAL_QUALITY_AND_FORMATS.md) and [Cost and Governance Plan](COST_CAPACITY_AND_GOVERNANCE.md).
+
+---
+
+## Historical implementation notes (retained for traceability)
+
 # FOLILUNE Studio — Staged Roadmap & Gates
 **Current:** Stage 1 interactive prototype v4 committed; real storage restart, official EPUBCheck and Reader compatibility gates remain open. Stage 0 foundation documentation. **Date:** 2026-11-11. No dates or claims of feature implementation are committed.
 

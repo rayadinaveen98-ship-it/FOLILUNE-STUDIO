@@ -21,7 +21,7 @@ No marketplace or open creator signup in V1.
 2. **Quiet surface, deep capabilities.** Progressive disclosure; don't present every tool at once.
 3. **Format-aware, not format-locked.** Common publishing primitives, specialist authoring workflows for prose and comics.
 4. **Autonomy is the core capability.** The engine performs production stages proactively within a controlled brief and budget. It must never silently overwrite approved or human-locked content.
-5. **No implicit publication.** Save, review approval and public release are different actions.
+5. **No implicit publication.** Save is never publication. The owner may deliberately choose **Approve & Publish** in a single authenticated action, or approve for later; release gates and audit records remain logically distinct.
 6. **Reader fidelity is a release criterion.** Preview must use the actual supported renderer and the exact release candidate, not a decorative approximation.
 7. **No regression by integration.** Studio and Reader evolve independently; integrations require explicit gates, compatibility checks and rollback.
 8. **Portable, durable work.** Local export/backup, revision history, immutable published editions and recoverable drafts.

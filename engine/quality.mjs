@@ -13,6 +13,10 @@ export function repetitionSignal(text, window = 5) {
   return {score:Number((repeated/inspected).toFixed(3)),inspected,unique:grams.size};
 }
 
+export function hasBlockingQualityWarnings(report) {
+  return (report?.warnings??[]).some(w=>['HEAVY_REPETITION','PLACEHOLDER_OR_INSTRUCTION_LEAK'].includes(w.code));
+}
+
 export function inspectDraft(sections,{minimumWords=100}={}) {
   const warnings = [];
   const sectionMetrics = sections.map((section,i)=>{

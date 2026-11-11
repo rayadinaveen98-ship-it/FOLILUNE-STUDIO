@@ -6,7 +6,7 @@ import {join, resolve} from 'node:path';
 import {randomUUID, createHash} from 'node:crypto';
 import {buildExperimentalEpub} from '../src/epub-export.mjs';
 import {validateStudioDraft} from '../src/content-model.mjs';
-import {inspectDraft} from './quality.mjs';
+import {inspectDraft,hasBlockingQualityWarnings} from './quality.mjs';
 
 const digest = data => createHash('sha256').update(data).digest('hex');
 const readJson=async file=>JSON.parse(await readFile(file,'utf8'));
@@ -73,6 +73,7 @@ export async function requestOwnerRevision(jobDir,provider,{sectionId,instructio
     const validated=validateStudioDraft(draft);
     if(!validated.ok)throw Error(`Updated draft failed structural validation: ${validated.errors.join('; ')}`);
     const quality=inspectDraft(nextSections);
+    if(hasBlockingQualityWarnings(quality))throw Error('Revision has blocking repetition or instruction-leak warnings; original review preserved');
     const qa={...state.qa,...quality,schemaValid:true,errors:[],sections:nextSections.length,wordCounts:nextSections.map(s=>words(s.text)),revisionCount:state.revisions.length+1,realReaderVerified:false,epubCheckVerified:false,rightsCleared:false,passed:true};
     const epub=Buffer.from(buildExperimentalEpub(draft));
     // Immutable artifact names. A crash before the state pointer updates leaves the old review intact.

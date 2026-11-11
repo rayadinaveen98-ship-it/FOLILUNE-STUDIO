@@ -18,6 +18,8 @@ The standalone Studio prototype now sequences saves, guards against stale saved-
 ### v3 EPUB packaging checkpoint (2026-11-11)
 A standalone Studio v3 prototype adds fully offline, experimental EPUB export for prose and illustrated works. Unit checks 9/9, independent ZIP/XML fixture structural checks 2/2 and three viewport browser smoke flows passed (the browser used simulated IndexedDB only). Comic publication, formal EPUBCheck, actual Reader rendition tests, real storage restart, owner approval and public publishing remain BLOCKED/UNVERIFIED. Stage 1 stays IN PROGRESS. See [STAGE1_V3_REPORT.md](STAGE1_V3_REPORT.md).
 
+**Checkpoint — Stage 1 v4 (2026-11-11):** Added an in-app IndexedDB recovery diagnostic, a real-process Chromium restart test, an official EPUBCheck 5.4 runner, a GitHub Actions test workflow, and an illustrated EPUB alt-text requirement. Local 10/10 exporter unit, 2/2 ZIP/XML and 3/3 simulated-storage viewport checks passed. Real browser navigation here is blocked; no real persistence, EPUBCheck or Reader integration result is claimed. See [Stage 1 v4 report](STAGE1_V4_REPORT.md). Stage 1 remains IN PROGRESS.
+
 ## Stage 2 — End-to-end publishing vertical slice
 Deliver: private Studio creates one original short story, one illustrated fable, one mini comic; revision snapshots, rights metadata, deterministic build, validation, real Reader preview, owner approval and separately authorized publish.
 Exit: releases are immutable, catalog contains approved artifacts only, and real Reader tests show accurate rendering and offline recovery; unsupported comic rendition remains blocked until reader capability is proven.

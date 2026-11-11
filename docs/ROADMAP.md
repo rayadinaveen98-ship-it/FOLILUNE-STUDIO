@@ -1,5 +1,5 @@
 # FOLILUNE Studio — Staged Roadmap & Gates
-**Current:** Stage 1 interactive prototype v1 committed; acceptance gates pending. Stage 0 foundation documentation. **Date:** 2026-11-11. No dates or claims of feature implementation are committed.
+**Current:** Stage 1 interactive prototype v4 committed; real storage restart, official EPUBCheck and Reader compatibility gates remain open. Stage 0 foundation documentation. **Date:** 2026-11-11. No dates or claims of feature implementation are committed.
 
 ## Stage 0 — Foundation (documentation started)
 Deliver: charter, information architecture, functional requirements, domain model, architecture, release contract RFC, security/rights baseline and decisions.

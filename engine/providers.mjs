@@ -47,7 +47,19 @@ export function ollamaProvider({ model, baseUrl = 'http://127.0.0.1:11434', time
 // Explicitly synthetic provider for offline integration tests. NEVER represent results as AI-generated books.
 export function simulatedProvider({failAt = null} = {}) {
   let calls = 0;
-  const words = (heading, i) => Array.from({length:12},(_,n)=>`${heading}: Asha crossed the old stone bridge while mist rose over the valley. She remembered the promise she made to Dev about the missing lantern. The village clock rang, and every sound seemed to carry a secret. A small choice changed the journey; the characters listened, reconsidered, and continued toward the light. Section ${i}, passage ${n+1}.`).join('\n\n');
+  const scenes = [
+    "At the edge of the village, Asha discovered a torn message sealed beneath a stone. The signature was familiar, but the date contradicted everything her grandmother had taught her.",
+    "Dev approached the abandoned bridge carrying a weathered notebook. He confessed that he had concealed a small brass key because it frightened him to imagine what the locked door might reveal.",
+    "While the river rose behind the orchard, a boatman described a forgotten ceremony. His careful pauses suggested that he knew more about the missing lantern than he wanted to admit.",
+    "In the crowded market, the friends compared their maps. One street had vanished from the latest drawing, leaving an empty white rectangle where the old observatory should stand.",
+    "Asha followed a trail of blue threads through the monastery garden. Beside a broken fountain she found a note written in the distinctive handwriting of her childhood teacher.",
+    "Under the copper roof of the watchtower, Dev began to question the promises that had guided his decisions. He understood that loyalty could become an excuse for remaining silent.",
+    "The caretaker listened without interrupting, then placed three photographs on the wooden table. Each showed a different season, but the same shadow appeared beneath the lighthouse window.",
+    "Just before dusk, Asha returned to the square and spoke openly about the evidence. A few villagers dismissed the danger; others offered supplies and joined the search.",
+    "The final crossing demanded an uncomfortable choice: protect an old secret or restore the village record. The friends discussed the cost before deciding to tell the truth together.",
+    "When the lantern finally shone across the valley, nobody claimed that every wound had healed. Yet the new light gave the community a place from which to begin rebuilding."
+];
+  const words = (heading, i) => scenes.map((passage,n)=>`${heading} — chapter ${i}, movement ${n+1}. ${passage}`).join('\n\n');
   return {
     kind:'simulated',model:'SYNTHETIC-TEST-ONLY',
     async generate({role,prompt}) {

@@ -28,6 +28,9 @@ Deliver: brief composer; adjustable budget and model/provider selection; run/que
 Exit: a complete original short story produced without per-chapter prompts; errors/retries do not corrupt human work; budget/provider limits enforced; output has substance, QA evidence and inspectable provenance. No public release.
 Dependencies: keep Stage 1 storage/restart, EPUBCheck and actual Reader fixture verification as parallel quality gates, but do not continue a manual-editor-only roadmap instead of implementing the core engine.
 
+#### Stage 1A autonomous engine v0.1 checkpoint — 2026-11-11
+A functioning local Node 22 orchestrator, local Ollama JSON-chat adapter, Stage 1A creation console, explicitly authorized automatic-ideation queue, and synthetic fixture tests were implemented. Local **10/10 Node tests passed**, including mock end-to-end draft→critique→revision→experimental EPUB, checkpoint recovery, Ollama request shape against a localhost stub, and idea-queue duplicate controls. A genuine installed Ollama model could not be exercised here; **actual AI-written narrative quality, real Reader compatibility, EPUBCheck and browser visual acceptance are unverified**. There is **no owner approval/public publishing backend**. See [Stage 1A implementation report](STAGE1A_IMPLEMENTATION_REPORT.md) and [run guide](STAGE1A_USER_GUIDE.md). The Stage 1A MVP remains IN PROGRESS.
+
 ### Stage 1B — Illustrated fable and mini comic automation (format expansion)
 Deliver: approved style guide and character references; automated original illustrations; scene-to-image mapping, alt text and readability QA; for comic: scripted panel plan, actual artwork, lettering, assembled pages and transcript.
 Exit: complete visually readable results, not merely prompts or a script; cost-controlled generation and owner review. Reader publication of comics remains blocked until a capable renderer is proven.

@@ -1,0 +1,24 @@
+name: Studio autonomous engine Stage 1A
+on:
+  push:
+    paths:
+      - 'engine/**'
+      - 'src/content-model.mjs'
+      - 'src/epub-export.mjs'
+      - 'tests/autonomous.test.mjs'
+      - 'fixtures/autonomous-brief.json'
+      - 'fixtures/autonomy-profile.json'
+      - '.github/workflows/studio-autonomy-stage1a.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deterministic-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Stage 1A autonomous engine with synthetic provider and local HTTP stub
+        run: node --test tests/autonomous.test.mjs

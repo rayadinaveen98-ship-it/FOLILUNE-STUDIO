@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/** A pre-authorized local content batch: ideate + produce original drafts only. Never publishes. */
 import {mkdir,readFile,writeFile,rename,open,rm} from 'node:fs/promises';
 import {resolve,join} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -17,7 +18,7 @@ export function validateProfile(input){
   const base=validateBrief({premise:'A sample premise long enough to pass initial brief checks.',language:input.language??'en',genre:input.genre??'literary fantasy',audience:input.audience??'general readers',style:input.style??'original and cohesive',constraints:input.constraints??'Original fiction only',sections:input.sections??3,maxCalls:input.maxCallsPerWork??10,maxOutputTokens:input.maxOutputTokens??2200});
   return {...base,theme,works};
 }
-export async function runAuthorizedBatch(profileInput,provider,{outputRoot='output',onProgress=()=>{}}={}){
+export async function runAuthorizedBatch(profileInput,provider,{outputRoot='output',onProgress=()=>{},onJobCreated=()=>{},onJobComplete=()=>{}}={}){
   const p=validateProfile(profileInput),root=resolve(outputRoot),ledgerFile=join(root,'private-production-ledger.json'),lockFile=join(root,'.batch.lock');
   await mkdir(root,{recursive:true});
   let lock;try{lock=await open(lockFile,'wx',0o600)}catch(e){if(e.code==='EEXIST')throw new Error('A production batch is already active; no concurrent run permitted');throw e;}
@@ -37,9 +38,11 @@ export async function runAuthorizedBatch(profileInput,provider,{outputRoot='outp
       const dir=await createJob(root,brief);
       const entry={id:dir.split(/[\\/]/).at(-1),digest,theme:p.theme,provider:provider.kind,model:provider.model,createdAt:new Date().toISOString(),status:'queued'};
       ledger.history.push(entry);await atomic(ledgerFile,JSON.stringify(ledger,null,2));
-      try{const job=await runJob(dir,provider,{onProgress});entry.status=job.status;results.push({jobDir:dir,status:job.status});}
-      catch(e){entry.status='failed';entry.error=e.message;results.push({jobDir:dir,status:'failed',error:e.message});}
+      onJobCreated({id:entry.id,index:i+1,total:p.works});
+      try{const job=await runJob(dir,provider,{onProgress:e=>onProgress({...e,jobId:entry.id})});entry.status=job.status;results.push({id:entry.id,jobDir:dir,status:job.status});}
+      catch(e){entry.status='failed';entry.error=e.message;results.push({id:entry.id,jobDir:dir,status:'failed',error:e.message});}
       await atomic(ledgerFile,JSON.stringify(ledger,null,2));
+      onJobComplete({id:entry.id,status:entry.status,error:entry.error??null,index:i+1,total:p.works});
     }
     return results;
   }finally{await lock.close();await rm(lockFile,{force:true})}

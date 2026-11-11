@@ -16,7 +16,14 @@ FOLILUNE Studio is a private, creator-first publishing workspace for original pr
 - The public repo contains no private manuscripts, API keys, credentials, or unpublished illustrations.
 - Compatibility with Reader is tested against real supported reader versions; features are gated until that evidence exists.
 
-## Testable Stage 1 prototype
+## Stage 1 prototype and verification
+
+- [Current v3 authoring prototype with experimental EPUB export](prototypes/studio-stage1-v3.html)
+- [EPUB exporter source](src/epub-export.mjs)
+- [v3 verification report and open gates](docs/STAGE1_V3_REPORT.md)
+- [Packager unit checks](tests/epub-export.test.mjs) and [structural EPUB checks](tests/epub-structure.py)
+
+## Earlier Stage 1 prototype
 
 - [Open Stage 1 v2 interactive Studio prototype](prototypes/studio-stage1-v2.html) (download Raw HTML to test locally)
 - [Latest v2 reliability and test report](docs/STAGE1_V2_REPORT.md)

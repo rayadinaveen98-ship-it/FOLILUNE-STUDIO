@@ -1,5 +1,5 @@
 # FOLILUNE Studio — Staged Roadmap & Gates
-**Current:** Stage 0 foundation documentation. **Date:** 2026-11-11. No dates or claims of feature implementation are committed.
+**Current:** Stage 1 interactive prototype v1 committed; acceptance gates pending. Stage 0 foundation documentation. **Date:** 2026-11-11. No dates or claims of feature implementation are committed.
 
 ## Stage 0 — Foundation (documentation started)
 Deliver: charter, information architecture, functional requirements, domain model, architecture, release contract RFC, security/rights baseline and decisions.
@@ -7,6 +7,7 @@ Exit gate: product-owner agrees on mandatory rules and first-release scope; docu
 Status: DOCUMENTED, awaiting review. Not equivalent to implementation approval.
 
 ## Stage 1 — Studio experience and technical spikes
+**Checkpoint 2026-11-11:** Standalone HTML Studio v1 committed with project workspace, format-aware editors, image attachments, Story Bible notes, IndexedDB implementation, basic preview and JSON backup/import. Chromium smoke flows passed at 1440x900, 960x760 and 390x844 using simulated IndexedDB only; real browser persistence and Reader compatibility are unverified. See [STAGE1_V1_REPORT.md](STAGE1_V1_REPORT.md). This stage remains IN PROGRESS, not complete.
 Deliver: interactive desktop/tablet Studio prototype; local project editor and autosave feasibility tests; representative prose/fable/comic content models; actual compatibility matrix against current Reader v12 and subsequent Reader revisions.
 Exit: creator can recover a saved draft after reload/restart, and test packages demonstrate round-trip content without unreported loss. Design direction specifically approved.
 Do not modify Reader production sources.

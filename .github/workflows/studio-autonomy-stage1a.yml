@@ -24,3 +24,10 @@ jobs:
         run: node --test
       - name: Verify real local HTTP creation, review, and publication lockout
         run: python3 tests/server-integration.py
+      - name: Verify queue authorization, duplicate prevention, and restart history
+        run: python3 tests/queue-integration.py
+      - name: Check JavaScript syntax
+        run: |
+          node --check engine/server.mjs
+          node --check engine/auto-queue.mjs
+          node --check engine/app.js

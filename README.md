@@ -24,6 +24,7 @@ FOLILUNE Studio is a private, creator-first publishing workspace for original pr
 - [Domain model](docs/DOMAIN_MODEL.md)
 - [Technical architecture](docs/TECHNICAL_ARCHITECTURE.md)
 - [Publication contract](docs/PUBLICATION_CONTRACT.md)
+- [Publication manifest JSON Schema — RFC v0.1](contracts/publication-manifest.v0.1.schema.json)
 - [Security, privacy & rights](docs/SECURITY_RIGHTS.md)
 - [Roadmap & acceptance gates](docs/ROADMAP.md)
 - [Decision register](docs/DECISIONS.md)

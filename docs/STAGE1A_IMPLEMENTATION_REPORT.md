@@ -14,12 +14,13 @@
 - 10/10 Node 22 unit/integration tests passed locally. Covered complete synthetic 3-section story → critique/revision → private EPUB; resume without repeating completed sections; failure with checkpoint; model/provider mismatch; JSON-mode Ollama adapter against LOCAL HTTP stub; authorized idea-first autonomous batch; duplicate and authorization restrictions.
 - Local CLI produced a synthetic `ready_for_owner_review` private draft plus EPUB.
 - Local HTTP endpoints returned expected 200 (console, browser JS) and 202 (start test run) responses with curl.
+- Static Chromium UI interaction at 1440×900, 960×760 and 390×844 using `page.set_content` and mocked HTTP: buttons wired, synthetic review shown, links available, no horizontal overflow or page errors. This is not a live browser/server integration test.
 - `node --check` succeeded for engine files used in local tests.
 - No model secrets or public release operations are present.
 
 ## NOT tested or NOT built
 - No installed real Ollama model was available here. **No real AI model produced a story during this verification.** Test prose is deliberately repetitive synthetic filler; test pass does NOT establish literary quality or Telugu ability.
-- Chromium GUI interaction verification was blocked by the environment policy (`ERR_BLOCKED_BY_ADMINISTRATOR`); HTTP checks do not establish visual browser acceptance.
+- Chromium navigation to the local HTTP server was blocked by the environment policy (`ERR_BLOCKED_BY_ADMINISTRATOR`); static UI tests with mocked network passed but do not establish live browser/server integration or real persistence.
 - No official EPUBCheck execution or actual FOLILUNE Reader import/render/position-recovery proof in this checkpoint.
 - No editor-facing targeted revision UI, character-lock workflow, generated illustrations, comic-page renderer, long-form novel pipeline, payment service or external creator portal.
 - The configured queue is autonomous **when launched**. It does not silently run in the background. Optional operating-system scheduling requires explicit user setup.

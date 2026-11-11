@@ -12,6 +12,9 @@ Deliver: interactive desktop/tablet Studio prototype; local project editor and a
 Exit: creator can recover a saved draft after reload/restart, and test packages demonstrate round-trip content without unreported loss. Design direction specifically approved.
 Do not modify Reader production sources.
 
+### Stage 1 v2 checkpoint — 2026-11-11
+The standalone Studio prototype now sequences saves, guards against stale saved-status updates, supports atomic backup batch import and exports typed private draft models for prose, illustrated stories and comics. A versioned draft JSON Schema and three representative fixtures were added. JS syntax, 7 content-model tests, JSON schema fixture validation, and three simulated-IDB browser smoke profiles passed. **Real IndexedDB browser restart, device recovery and Reader integration remain unverified**. See [STAGE1_V2_REPORT.md](STAGE1_V2_REPORT.md) and [READER_COMPATIBILITY_V1.md](READER_COMPATIBILITY_V1.md). Stage 1 remains IN PROGRESS.
+
 ## Stage 2 — End-to-end publishing vertical slice
 Deliver: private Studio creates one original short story, one illustrated fable, one mini comic; revision snapshots, rights metadata, deterministic build, validation, real Reader preview, owner approval and separately authorized publish.
 Exit: releases are immutable, catalog contains approved artifacts only, and real Reader tests show accurate rendering and offline recovery; unsupported comic rendition remains blocked until reader capability is proven.

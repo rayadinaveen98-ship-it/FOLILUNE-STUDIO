@@ -1,6 +1,6 @@
 {
   "name": "folilune-studio-autonomous-stage1a",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "private": true,
   "description": "Local-only autonomous prose production experiment; publishing is disabled",
@@ -13,6 +13,8 @@
     "simulate": "node engine/cli.mjs run fixtures/brief.json --provider simulated",
     "simulate:auto": "node engine/auto-queue.mjs fixtures/autonomy-profile.json simulated",
     "test": "node --test",
-    "test:integration": "python tests/server-integration.py"
+    "test:integration": "python tests/server-integration.py && python tests/queue-integration.py",
+    "test:queue": "python tests/queue-integration.py",
+    "test:ui": "python tests/queue-ui-smoke.py"
   }
 }

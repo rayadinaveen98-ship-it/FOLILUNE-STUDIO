@@ -58,7 +58,10 @@ const server=createServer(async(req,res)=>{
             onProgress:x=>{queueState.progress=x.message||'Generating private draft';if(x.jobId)jobs.set(x.jobId,{active:true,progress:queueState.progress});}
           });
           queueState.lastResults=results.map(x=>({id:x.id??null,status:x.status,error:x.error??null}));
-          queueState.progress='Private production batch finished. Review each result before any future release.';
+          const ready=queueState.lastResults.filter(x=>x.status==='ready_for_owner_review').length;
+          const skipped=queueState.lastResults.filter(x=>x.status==='duplicate-blocked').length;
+          const failed=queueState.lastResults.filter(x=>x.status==='failed').length;
+          queueState.progress=`Private batch finished: ${ready} ready for review, ${skipped} duplicate ideas skipped, ${failed} failed. Nothing published.`;
         }catch(e){queueState.lastError=e.message;queueState.progress=`Private batch stopped: ${e.message}`;}
         finally{queueState.active=false;queueState.currentJobId=null;for(const [id,item] of jobs)if(item.active)jobs.set(id,{...item,active:false});}
       });

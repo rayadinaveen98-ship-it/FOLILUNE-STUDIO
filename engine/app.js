@@ -3,6 +3,12 @@ let timer=null, currentJob=null, currentVersion=1, reviewBusy=false, currentSect
 let queueTimer=null, queueBusy=false, manualBusy=false;
 const buttonState=busy=>{manualBusy=busy;$('real').disabled=busy||queueBusy;$('demo').disabled=busy||queueBusy;$('queueStart').disabled=busy||queueBusy;};
 const uiStatus=(message,bad=false)=>{$('status').textContent=message;$('status').style.background=bad?'#fff0e7':'#eef3eb';};
+async function checkLocalModel(){
+  const el=$('modelStatus');el.textContent='Checking for local models…';
+  try{const res=await fetch('/api/models');const data=await res.json();if(!res.ok)throw Error(data.error||'Ollama unavailable');el.textContent=data.models.length?'Installed local models: '+data.models.join(', '):'Ollama is running but no models are installed.';
+  }catch(e){el.textContent='Ollama preflight: '+e.message;}
+}
+$('checkModel').addEventListener('click',checkLocalModel);
 const post=async(path,data)=>{
   const res=await fetch(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});
   const json=await res.json();if(!res.ok)throw Error(json.error||'Request failed');return json;
@@ -64,6 +70,7 @@ async function poll(id){
     uiStatus(`${synthetic}${data.status.toUpperCase()} · ${data.stage} · review v${currentVersion} · ${data.calls} model calls. ${data.progress||''}`,data.status==='failed');
     $('summary').textContent=data.plan?`${data.plan.title} · ${data.sections.length}/${data.plan.outline.length} sections · ${data.revisions.length} editorial revisions`:'Planning and preparing...';
     renderChapters(data);renderReview(data);
+    if(data.status==='needs_attention'&&data.qa){uiStatus('NEEDS ATTENTION · '+(data.qa.reason||'Quality gate blocked')+' · '+(data.qa.warnings||[]).map(w=>w.message).slice(0,2).join(' · '),true);}
     if(data.status==='ready_for_owner_review'){$('json').href=`/api/jobs/${id}/draft`;$('epub').href=`/api/jobs/${id}/epub`;}
     if(['ready_for_owner_review','failed','needs_attention'].includes(data.status)&&!data.reviewBusy){clearInterval(timer);timer=null;buttonState(false);if(data.error)uiStatus(`${data.status}: ${data.error.message}`,true);}
   }catch(e){clearInterval(timer);timer=null;uiStatus(e.message,true);buttonState(false);}

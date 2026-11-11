@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {createJob,runJob,jobStatus} from './runner.mjs';
 import {validateProfile,runAuthorizedBatch} from './auto-queue.mjs';
 import {ollamaProvider,simulatedProvider} from './providers.mjs';
+import {listLocalModels,requireInstalledModel} from './model-preflight.mjs';
 import {requestOwnerRevision,setSectionLock} from './review.mjs';
 
 const port=Number(process.env.FOLILUNE_PORT || 44831);
@@ -40,6 +41,10 @@ const server=createServer(async(req,res)=>{
     if(!validateHost(req)||!validateOrigin(req))return fail(res,403,'Non-loopback host or origin blocked');
     if(req.method==='GET'&&path==='/')return respond(res,200,await readFile(ui,'utf8'),'text/html; charset=utf-8');
     if(req.method==='GET'&&path==='/app.js')return respond(res,200,await readFile(appJs,'utf8'),'text/javascript; charset=utf-8');
+    if(req.method==='GET'&&path==='/api/models'){
+      try{return respond(res,200,{...(await listLocalModels()),localOnly:true});}
+      catch(e){return respond(res,503,{available:false,models:[],error:e.message,localOnly:true});}
+    }
     if(req.method==='GET'&&path==='/api/queue'){
       return respond(res,200,{...queueState,history:await queueHistory(),publishingEnabled:false});
     }
@@ -49,6 +54,7 @@ const server=createServer(async(req,res)=>{
       const profile=validateProfile(payload.profile);
       const provider=payload.provider==='simulated'?simulatedProvider():payload.provider==='ollama'?ollamaProvider({model:payload.model}):null;
       if(!provider)return fail(res,400,'Select synthetic test or an installed local Ollama model');
+      if(provider.kind==='ollama')await requireInstalledModel(provider.model);
       queueState={active:true,progress:'Authorized batch queued; only private draft creation permitted',currentJobId:null,lastResults:[],lastError:null,startedAt:new Date().toISOString()};
       setImmediate(async()=>{
         try{
@@ -72,6 +78,7 @@ const server=createServer(async(req,res)=>{
       const payload=await jsonBody(req);
       const provider=payload.provider==='simulated'?simulatedProvider():payload.provider==='ollama'?ollamaProvider({model:payload.model}):null;
       if(!provider)return fail(res,400,'Choose simulated or an installed local Ollama model');
+      if(provider.kind==='ollama')await requireInstalledModel(provider.model);
       const dir=await createJob(root,payload.brief);
       const id=dir.split(/[\\/]/).at(-1);
       jobs.set(id,{active:true,progress:'Queued'});
@@ -96,6 +103,7 @@ const server=createServer(async(req,res)=>{
         if(state.status!=='ready_for_owner_review')return fail(res,409,'Review draft not ready');
         const provider=state.providerKind==='simulated'?simulatedProvider():state.providerKind==='ollama'?ollamaProvider({model:state.model}):null;
         if(!provider)return fail(res,409,'No supported provider recorded for this job');
+        if(provider.kind==='ollama')await requireInstalledModel(provider.model);
         if(data.expectedReviewVersion!==(state.reviewVersion??1))return fail(res,409,'Stale review version; reload before editing');
         if(!state.sections.some(s=>s.id===data.sectionId&&!s.locked))return fail(res,409,'Section not found or locked');
         if(typeof data.instruction!=='string'||data.instruction.trim().length<12||data.instruction.length>1200)return fail(res,400,'Provide an instruction of 12–1200 characters');
@@ -107,7 +115,7 @@ const server=createServer(async(req,res)=>{
         return respond(res,202,{id,status:'revision_queued'});
       }
       if(req.method!=='GET')return fail(res,405,'Unsupported action');
-      if(!which){const status=await jobStatus(dir);return respond(res,200,{id:status.id,status:status.status,stage:status.stage,calls:status.calls,progress:jobs.get(id)?.progress??'',reviewBusy:jobs.get(id)?.active??false,reviewVersion:status.reviewVersion??1,qa:status.qa,plan:status.plan,sections:status.sections.map(s=>({id:s.id,title:s.title,text:s.text,locked:!!s.locked})),revisions:status.revisions.map(r=>({sectionId:r.sectionId,reason:r.reason,instruction:r.instruction,reviewVersion:r.reviewVersion})),error:status.lastError,provider:status.providerKind});}
+      if(!which){const status=await jobStatus(dir);return respond(res,200,{id:status.id,status:status.status,stage:status.stage,calls:status.calls,progress:jobs.get(id)?.progress??'',reviewBusy:jobs.get(id)?.active??false,reviewVersion:status.reviewVersion??1,qualityRepairAttempts:status.qualityRepairAttempts??0,qa:status.qa,plan:status.plan,sections:status.sections.map(s=>({id:s.id,title:s.title,text:s.text,locked:!!s.locked})),revisions:status.revisions.map(r=>({sectionId:r.sectionId,reason:r.reason,instruction:r.instruction,reviewVersion:r.reviewVersion})),error:status.lastError,provider:status.providerKind});}
       const status=await jobStatus(dir);
       if(status.status!=='ready_for_owner_review')return fail(res,409,'Review artifacts are not ready');
       if(which==='draft')return respond(res,200,JSON.parse(await readFile(join(dir,status.reviewArtifacts?.draft??'review-draft.json'),'utf8')),'application/json; charset=utf-8');

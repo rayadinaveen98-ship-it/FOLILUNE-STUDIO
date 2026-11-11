@@ -6,14 +6,20 @@ FOLILUNE Studio is an **autonomous literary creation and publishing system**, no
 
 ## Status
 
-**Stage 1 — interactive prototype v4 (2026-11-11), acceptance incomplete.** Foundation documentation is committed and a standalone local-first authoring prototype exists. There is no production backend, release service, Reader integration, or proven physical-device persistence.
+**Stage 1A — autonomous prose engine v0.1 (2026-11-11), acceptance incomplete.** A local runnable pipeline exists alongside the earlier Studio v4 prototype. Only synthetic/stub integration tests have passed. There is no production backend, release service, Reader integration, or proven real-model literary quality.
 
 ## Corrected primary roadmap (2026-11-11)
 
 - **CONFIRMED direction:** autonomous story/comic production is the core product; it was incorrectly deferred in the earlier manual-editor-first plan.
 - [Autonomous creation engine — pipeline, roles, budgets, controls and first MVP](docs/AUTONOMOUS_CREATION_ENGINE.md)
 - [Future independent creators — submission workflow, rights and editorial governance](docs/CREATOR_ECOSYSTEM_FUTURE.md)
-- **Actual progress:** Studio v4 only contains manual authoring, local data handling and experimental EPUB export. No real generative agents, scheduler, image-generation pipeline, approvals backend or Reader publishing exists yet.
+- **Actual progress:** Stage 1A adds a runnable automated multi-stage PROSE writing engine and an opt-in local idea-generation queue. Only synthetic/stub runs have been verified; no installed real model, auto-scheduler, image pipeline, approval backend or Reader publishing has been verified or implemented.
+
+## Stage 1A — Autonomous engine v0.1 (working local prototype, NOT published)
+- [Autonomous production source](engine/runner.mjs), [local model adapter](engine/providers.mjs), [CLI](engine/cli.mjs), [authorized automatic idea queue](engine/auto-queue.mjs), and [localhost console](engine/server.mjs).
+- [Run guide](docs/STAGE1A_USER_GUIDE.md), [verification report](docs/STAGE1A_IMPLEMENTATION_REPORT.md), [tests](tests/autonomous.test.mjs), and [CI workflow](.github/workflows/studio-autonomy-stage1a.yml).
+- **10/10 local Node synthetic/stub tests passed.** Actual installed-model generation, editorial quality, real Reader fidelity and official EPUBCheck are NOT verified.
+- No approval or public publishing endpoint exists. The `output/` private manuscript directory is Git-ignored. FOLILUNE Reader repository unchanged.
 
 ## Stage 1 v4 — working proof (not production)
 

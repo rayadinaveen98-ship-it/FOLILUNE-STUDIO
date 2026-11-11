@@ -1,10 +1,10 @@
-# FOLILUNE Studio — Stage 1A Autonomous Creation Engine — v0.3
+# FOLILUNE Studio — Stage 1A Autonomous Creation Engine — v0.4
 
 **Private creative production prototype · no public publishing**
 
-This is the first executable autonomous story engine and its v0.2 owner-review update. It can use an explicitly selected **local Ollama model** to propose an original premise, plan an outline, write the complete 3–5-section story, run an editorial critique, revise a section, and prepare an experimental EPUB for human review.
+This is the current experimental autonomous story engine, now including bounded QA repair and local model preflight. It can use an explicitly selected **local Ollama model** to propose an original premise, plan an outline, write the complete 3–5-section story, run an editorial critique, revise a section, and prepare an experimental EPUB for human review.
 
-A **synthetic provider** is included only to test pipeline reliability; its output is deliberately repetitive and must not be mistaken for a real AI-authored literary work.
+A **synthetic provider** is included only to test pipeline reliability; its artificial paragraphs must not be mistaken for literary-quality AI writing.
 
 ## What you need
 - Windows/macOS/Linux with **Node.js 22+**.
@@ -19,8 +19,17 @@ A **synthetic provider** is included only to test pipeline reliability; its outp
 - [Detailed v0.3 setup instructions](docs/STAGE1A_V03_ENGINE_README.md) · [Implementation/test report](docs/STAGE1A_V03_REPORT.md).
 - **Tests:** 15/15 synthetic engine checks, real local HTTP manual and queue integration, 3 responsive browser UI mock-HTTP checks. Real Ollama creative quality remains unverified.
 
+## Stage 1A v0.4 — current checkpoint
+
+- **Local model preflight:** Check installed Ollama models before trying to generate; unavailable or unknown models are rejected before a production job is created.
+- **Bounded autonomous quality repair:** Severe repetition or apparent prompt leakage triggers at most two revision attempts within the existing call limit; unresolved work is marked **needs_attention** and is not exported as ready.
+- **Safer owner revisions:** Rewrites that introduce blocking quality warnings are rejected; the previous approved-for-review artifact is preserved.
+- **Verified locally:** 19/19 Node tests, local HTTP production/review and queue integration, and 3/3 simulated-browser viewport flows.
+- **Not yet verified:** genuine AI prose quality, installed Ollama execution, EPUBCheck certification, Reader rendering or publication. **Reader repository untouched.**
+- [v0.4 report](docs/STAGE1A_V04_REPORT.md) · [model preflight source](engine/model-preflight.mjs) · [quality gate tests](tests/quality-gates-v04.test.mjs).
+
 ## 1. Try the studio console (Windows)
-Double-click `START_STUDIO_WINDOWS.bat`, then open `http://127.0.0.1:44831` in Chrome/Edge. Use **Test workflow (synthetic)** to verify the whole pipeline without a model. If Ollama is already running, enter the name of your installed model and use **Generate with local model**.
+Double-click `START_STUDIO_WINDOWS.bat`, then open `http://127.0.0.1:44831` in Chrome/Edge. Use **Test workflow (synthetic)** to verify the whole pipeline without a model. If Ollama is already running, select **Check local AI models**, enter an installed model name and then select **Generate with local model**.
 
 From a terminal (all systems):
 

@@ -1,0 +1,13 @@
+{
+  "authorization": "ALLOW_PRIVATE_DRAFT_CREATION_ONLY",
+  "theme": "Original atmospheric coastal mysteries about memory, belonging, and courageous choices",
+  "language": "en",
+  "genre": "literary fantasy",
+  "audience": "general readers",
+  "style": "emotionally vivid, compelling dialogue, a genuine ending",
+  "constraints": "Create original plots and characters. No copyrighted franchises, celebrities or borrowed stories.",
+  "sections": 3,
+  "worksPerRun": 1,
+  "maxCallsPerWork": 10,
+  "maxOutputTokens": 2200
+}

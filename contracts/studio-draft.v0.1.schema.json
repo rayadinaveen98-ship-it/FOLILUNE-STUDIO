@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://folilune.example/contracts/studio-draft/0.1.0",
+  "title": "FOLILUNE Studio Private Draft Interchange v0.1",
+  "description": "Private editable draft, not an approved Reader publication.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "schemaVersion",
+    "warning",
+    "project"
+  ],
+  "properties": {
+    "kind": {
+      "const": "folilune-studio-draft"
+    },
+    "schemaVersion": {
+      "const": "0.1.0"
+    },
+    "warning": {
+      "type": "string"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "format",
+        "title",
+        "subtitle",
+        "language",
+        "summary",
+        "storyBible",
+        "sections"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "format": {
+          "enum": [
+            "prose",
+            "illustrated",
+            "comic"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "subtitle": {
+          "type": "string",
+          "maxLength": 180
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 35
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 1500
+        },
+        "storyBible": {
+          "type": "string",
+          "maxLength": 10000
+        },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 250,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "role",
+              "title",
+              "body",
+              "artwork"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "enum": [
+                  "chapter",
+                  "spread",
+                  "page"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 140
+              },
+              "body": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "format",
+                  "text"
+                ],
+                "properties": {
+                  "format": {
+                    "const": "plain-text"
+                  },
+                  "text": {
+                    "type": "string",
+                    "maxLength": 150000
+                  }
+                }
+              },
+              "artwork": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "dataUrl",
+                      "altText"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "dataUrl": {
+                        "type": "string",
+                        "pattern": "^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$",
+                        "maxLength": 3000000
+                      },
+                      "altText": {
+                        "type": "string",
+                        "maxLength": 350
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

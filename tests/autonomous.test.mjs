@@ -80,3 +80,23 @@ test('no publish functions or catalog changes exist in first engine',async()=>{
   assert.ok(!source.includes('POST /publish'));
   assert.ok(!source.includes('publishCatalog('));
 });
+
+test('authorized autonomy profile generates an idea and complete private work without individual premise',async()=>{
+  const {runAuthorizedBatch}=await import('../engine/auto-queue.mjs');
+  const root=await temp();try{
+    const profile={authorization:'ALLOW_PRIVATE_DRAFT_CREATION_ONLY',theme:'Mysterious small towns and forgotten promises',worksPerRun:1,sections:3,maxCallsPerWork:10};
+    const r=await runAuthorizedBatch(profile,simulatedProvider(),{outputRoot:root});
+    assert.equal(r.length,1);assert.equal(r[0].status,'ready_for_owner_review');
+    const ledger=JSON.parse(await readFile(join(root,'private-production-ledger.json'),'utf8'));
+    assert.equal(ledger.history.length,1);
+    assert.equal(ledger.history[0].status,'ready_for_owner_review');
+    const again=await runAuthorizedBatch(profile,simulatedProvider(),{outputRoot:root});
+    assert.equal(again[0].status,'duplicate-blocked');
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('autonomous production refuses unapproved or excessive batch profile',async()=>{
+  const {validateProfile}=await import('../engine/auto-queue.mjs');
+  assert.throws(()=>validateProfile({theme:'A detailed fantasy universe'}),/authorization/);
+  assert.throws(()=>validateProfile({authorization:'ALLOW_PRIVATE_DRAFT_CREATION_ONLY',theme:'A detailed fantasy universe',worksPerRun:20}),/At most 2/);
+});

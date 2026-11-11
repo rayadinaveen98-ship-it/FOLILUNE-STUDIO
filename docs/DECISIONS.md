@@ -25,6 +25,14 @@
 | S-019 | Provider/model selection, cost caps, local/cloud split and retries | PROPOSED | Needed before enabling autonomous external model calls |
 | S-020 | Multi-creator publishing includes content moderation and rights verification | PROPOSED FOR FUTURE | Avoid uncontrolled distribution or copyright problems |
 
+| S-021 | Ten distinct complete original short-story candidates per day at demonstrated sustainable capacity | CONFIRMED — TARGET | Production candidate quota; actual published titles depend on quality and owner approval |
+| S-022 | Separate deliberate cadence for novel episodes, completed novels, illustrated fables, and complete comics | CONFIRMED — TARGET FORMAT FAMILIES; CADENCE PROPOSED | No mislabeling chapters/scripts as finished works |
+| S-023 | User experience requires no model installation or model choice; secure inference gateway operated behind Studio | CONFIRMED — PRODUCT UX; IMPLEMENTATION PENDING | External compute/providers and paid usage still required unless owned equivalent exists |
+| S-024 | Public release always requires authenticated owner authorization and passed Reader validation | CONFIRMED | Automation may create private works on an approved schedule, never silently publish |
+| S-025 | First priority is real original story end-to-end, then approved Reader delivery before scaling to ten/day | PROPOSED IMPLEMENTATION ORDER | Proves product loop, not just local demos |
+| S-026 | Daily generation cost ceiling, cap enforcement, unique content and QA circuit breakers | PROPOSED HARD ENGINEERING GUARDRAILS | Avoid cost surprises or flooding catalog with junk |
+| S-027 | Master docs supersede obsolete optional-AI-first and manual-editor-first roadmaps | CONFIRMED — DIRECTION | Reference DELIVERY_ROADMAP_MASTER.md and MASTER_PRODUCT_PLAN.md |
+
 ## Open product questions, not blocking documentation work
 - V1 is owner-controlled; when should invited external creators first participate in a curated pilot?
 - What is the first artwork source workflow: imported finished art only, or on-canvas editing from Stage 2?

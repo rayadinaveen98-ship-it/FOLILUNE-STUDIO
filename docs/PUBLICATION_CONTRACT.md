@@ -13,15 +13,15 @@ Define the boundary that lets Studio release structured reading artifacts to FOL
 - Unsupported or unsafe content results in a clear block, never an invented 'perfect' rendering claim.
 
 ## Proposed release manifest fields
-- schemaVersion; publicationId; workId; editionId; releaseId; version.
+- schemaVersion; candidateId; publicationId; workId; editionId; editionVersion.
 - title, subtitle, synopsis, creators with role, language (BCP 47), optional series/volume, type.
 - rights: declared publishing authority/license, content-rights review status; no raw private contract.
 - readingDirection (ltr/rtl), audience/age rating, accessibility declarations.
 - requiredCapabilities: explicit feature IDs and minimum version (e.g. prose-epub3-v1 or comic-pages-v1).
 - readingOrder: ordered stable item IDs and safe package-relative paths, declared MIME media types.
 - assets: safe package-relative paths, declared MIME types, byte lengths, SHA-256, alt text when applicable.
-- compatibleReaderBuilds: tested profiles, not a promise about all future versions.
-- sourceRevisionDigest and packageDigest, build toolchain ID, build timestamp/reproducibility policy.
+- Reader compatibility evidence and approved Reader build matrix are stored in the external validation report, not self-asserted as release permissions in an editable manifest.
+- sourceRevisionDigest, build toolchain ID and build timestamp/reproducibility policy. The package digest is recorded OUTSIDE the package in the immutable candidate/release record to avoid self-hashing. Release ID and catalog status also belong to that external record.
 - release state/public catalog eligibility lives on the release server and is **not** controlled by a client-edited manifest flag.
 
 ## Canonical document types
@@ -52,7 +52,7 @@ Define the boundary that lets Studio release structured reading artifacts to FOL
 
 ## Versioning
 - schemaVersion changes independently of edition semver. Additive changes may be minor; incompatible changes are major.
-- Packages are immutable, addressed by digest. A corrected publication is a new release, not in-place mutation.
+- Packages are immutable, addressed by a digest stored in candidate/release metadata outside the package. A corrected publication is a new release, not in-place mutation.
 - Approval is bound to a candidate digest and validation report digest, invalidated if either changes.
 
 ## References

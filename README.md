@@ -6,7 +6,7 @@ FOLILUNE Studio is a private, creator-first publishing workspace for original pr
 
 ## Status
 
-**Stage 1 — interactive prototype v1 (2026-11-11), acceptance incomplete.** Foundation documentation is committed and a standalone local-first authoring prototype exists. There is no production backend, release service, Reader integration, or proven physical-device persistence.
+**Stage 1 — interactive prototype v2 (2026-11-11), acceptance incomplete.** Foundation documentation is committed and a standalone local-first authoring prototype exists. There is no production backend, release service, Reader integration, or proven physical-device persistence.
 
 ## Non-negotiable boundaries
 
@@ -18,8 +18,12 @@ FOLILUNE Studio is a private, creator-first publishing workspace for original pr
 
 ## Testable Stage 1 prototype
 
-- [Open the standalone Studio prototype source](prototypes/studio-stage1-v1.html) (download Raw HTML to test locally)
-- [Stage 1 v1 verification report and limitations](docs/STAGE1_V1_REPORT.md)
+- [Open Stage 1 v2 interactive Studio prototype](prototypes/studio-stage1-v2.html) (download Raw HTML to test locally)
+- [Latest v2 reliability and test report](docs/STAGE1_V2_REPORT.md)
+- [Private structured draft contract](contracts/studio-draft.v0.1.schema.json) and [draft model adapter](src/content-model.mjs)
+- [Prose](fixtures/prose.draft.json), [illustrated](fixtures/illustrated.draft.json) and [comic](fixtures/comic.draft.json) test fixtures
+- [Current Studio-to-Reader compatibility assessment](docs/READER_COMPATIBILITY_V1.md)
+- [Previous v1 prototype](prototypes/studio-stage1-v1.html) and [v1 report](docs/STAGE1_V1_REPORT.md)
 
 ## Documentation
 

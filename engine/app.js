@@ -1,6 +1,7 @@
 const $ = id=>document.getElementById(id);
 let timer=null, currentJob=null, currentVersion=1, reviewBusy=false, currentSections=[];
-const buttonState=busy=>{$('real').disabled=busy;$('demo').disabled=busy;};
+let queueTimer=null, queueBusy=false, manualBusy=false;
+const buttonState=busy=>{manualBusy=busy;$('real').disabled=busy||queueBusy;$('demo').disabled=busy||queueBusy;$('queueStart').disabled=busy||queueBusy;};
 const uiStatus=(message,bad=false)=>{$('status').textContent=message;$('status').style.background=bad?'#fff0e7':'#eef3eb';};
 const post=async(path,data)=>{
   const res=await fetch(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});
@@ -81,3 +82,50 @@ async function ownerRevise(){
 $('brief').addEventListener('submit',e=>{e.preventDefault();start('ollama');});
 $('demo').addEventListener('click',()=>start('simulated'));
 $('revise').addEventListener('click',ownerRevise);
+
+// Private autonomous work queue. No publication API exists.
+function showQueueHistory(data){
+  $('queueItems').replaceChildren();
+  const entries=data.history||[];
+  if(!entries.length){const p=document.createElement('p');p.className='hint';p.textContent='No local production history yet.';$('queueItems').append(p);return;}
+  for(const entry of entries){
+    if(!entry.id)continue;
+    const item=document.createElement('div');item.className='queue-item';
+    const title=document.createElement('strong');title.textContent=entry.title?entry.title+' · '+(entry.status==='ready_for_owner_review'?'Ready for review':entry.status):entry.status==='ready_for_owner_review'?'Draft ready for your review':entry.status==='queued'?'Queued private production':entry.status==='failed'?'Private production failed':'Private draft · '+entry.status;
+    const meta=document.createElement('div');meta.className='queue-meta';meta.textContent=`${entry.provider==='simulated'?'SYNTHETIC TEST':'LOCAL MODEL'} · ${entry.createdAt||''} · ${entry.theme||''}`;
+    const open=document.createElement('button');open.className='btn alt';open.type='button';open.textContent=entry.status==='ready_for_owner_review'?'Open completed story':'Inspect work';
+    open.disabled=queueBusy;
+    open.addEventListener('click',()=>{currentJob=entry.id;clearInterval(timer);timer=setInterval(()=>poll(currentJob),1000);poll(currentJob);document.getElementById('summary').scrollIntoView({behavior:'smooth',block:'center'});});
+    item.append(title,meta,open);
+    if(entry.error){const error=document.createElement('p');error.className='hint';error.textContent='Error: '+entry.error;item.append(error);}
+    $('queueItems').append(item);
+  }
+}
+async function refreshQueue(){
+  try{
+    const res=await fetch('/api/queue');const data=await res.json();if(!res.ok)throw Error(data.error||'Queue unavailable');
+    queueBusy=!!data.active;
+    $('queueStatus').textContent=(data.progress||'No queue in progress')+(data.active?' · Working locally…':'');
+    $('queueStart').disabled=manualBusy||queueBusy;
+    $('real').disabled=manualBusy||queueBusy;$('demo').disabled=manualBusy||queueBusy;
+    $('queueProvider').disabled=queueBusy;
+    showQueueHistory(data);
+  }catch(e){$('queueStatus').textContent='Queue check failed: '+e.message;}
+}
+async function startPrivateBatch(event){
+  event.preventDefault();
+  if(!$('queueForm').reportValidity())return;
+  const provider=$('queueProvider').value,model=$('queueModel').value.trim();
+  if(provider==='ollama'&&!model){$('queueStatus').textContent='Select an installed local Ollama model first.';return;}
+  const profile={authorization:'ALLOW_PRIVATE_DRAFT_CREATION_ONLY',theme:$('queueTheme').value,language:$('queueLanguage').value,genre:$('queueGenre').value,worksPerRun:Number($('queueWorks').value),sections:Number($('queueSections').value),maxCallsPerWork:Number($('queueMaxCalls').value),maxOutputTokens:2200};
+  $('queueStart').disabled=true;$('queueStatus').textContent='Requesting a bounded, private production batch…';
+  try{
+    await post('/api/queue/start',{provider,model,profile});
+    $('queueConsent').checked=false;
+    await refreshQueue();
+    clearInterval(queueTimer);queueTimer=setInterval(refreshQueue,1200);
+  }catch(e){$('queueStatus').textContent='Could not start: '+e.message;await refreshQueue();}
+}
+$('queueForm').addEventListener('submit',startPrivateBatch);
+refreshQueue();
+queueTimer=setInterval(refreshQueue,3500);

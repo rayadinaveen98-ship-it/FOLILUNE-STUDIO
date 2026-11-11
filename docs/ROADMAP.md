@@ -20,6 +20,18 @@ A standalone Studio v3 prototype adds fully offline, experimental EPUB export fo
 
 **Checkpoint — Stage 1 v4 (2026-11-11):** Added an in-app IndexedDB recovery diagnostic, a real-process Chromium restart test, an official EPUBCheck 5.4 runner, a GitHub Actions test workflow, and an illustrated EPUB alt-text requirement. Local 10/10 exporter unit, 2/2 ZIP/XML and 3/3 simulated-storage viewport checks passed. Real browser navigation here is blocked; no real persistence, EPUBCheck or Reader integration result is claimed. See [Stage 1 v4 report](STAGE1_V4_REPORT.md). Stage 1 remains IN PROGRESS.
 
+## Corrected product priority — AUTONOMOUS ENGINE FIRST (confirmed 2026-11-11)
+The earlier roadmap incorrectly deferred AI content generation to Stage 5. The owner has clarified that Studio is primarily an **autonomous creative content production system**, producing complete stories, novels, comics and fables with human approval before publication. Manual authoring v1–v4 is supporting infrastructure only. The existing v4 tests remain valid for what they tested, but **no automated creation or agent orchestration has yet been implemented**.
+
+### Stage 1A — Autonomous production MVP (NEW HIGHEST FUNCTIONAL PRIORITY)
+Deliver: brief composer; adjustable budget and model/provider selection; run/queue controller; deterministic staged workflow; autonomous outline/Story Bible/multi-section prose drafting; editorial critique with at least one revision pass; chapter-specific retry and human lock; full revision history and activity log; EPUB review artifact.
+Exit: a complete original short story produced without per-chapter prompts; errors/retries do not corrupt human work; budget/provider limits enforced; output has substance, QA evidence and inspectable provenance. No public release.
+Dependencies: keep Stage 1 storage/restart, EPUBCheck and actual Reader fixture verification as parallel quality gates, but do not continue a manual-editor-only roadmap instead of implementing the core engine.
+
+### Stage 1B — Illustrated fable and mini comic automation (format expansion)
+Deliver: approved style guide and character references; automated original illustrations; scene-to-image mapping, alt text and readability QA; for comic: scripted panel plan, actual artwork, lettering, assembled pages and transcript.
+Exit: complete visually readable results, not merely prompts or a script; cost-controlled generation and owner review. Reader publication of comics remains blocked until a capable renderer is proven.
+
 ## Stage 2 — End-to-end publishing vertical slice
 Deliver: private Studio creates one original short story, one illustrated fable, one mini comic; revision snapshots, rights metadata, deterministic build, validation, real Reader preview, owner approval and separately authorized publish.
 Exit: releases are immutable, catalog contains approved artifacts only, and real Reader tests show accurate rendering and offline recovery; unsupported comic rendition remains blocked until reader capability is proven.
@@ -33,9 +45,12 @@ Exit: complex authored projects preserve content fidelity, stable IDs, safe reco
 Deliver: authenticated hosted publishing control plane if needed, object storage, release audit, rollout, catalog versioning, idempotency, rollout rollback, safe delivery, rights/takedown mechanisms.
 Exit: staging-to-public promotion tested; release never occurs without owner action; Reader migration and failure recovery tested across supported devices.
 
-## Stage 5 — Optional intelligence and multi-edition workflows
-Candidate features: AI writing/art assistance, continuity suggestions, translations, narration, serialized releases. Each needs economics, rights, privacy and reader-compatibility review.
-Exit: opt-in workflows never automatically alter approved assets or release without authorization.
+## Stage 5 — Advanced autonomous workflows and multi-edition support
+Candidate features: long-form novel continuity and scale, visual generation improvements, model routing/quality evaluations, localization, narration, serialized release scheduling and sustained production queues. AI writing and review are core Stage 1A functionality, NOT deferred to this stage.
+Exit: advanced flows remain opt-in, cost-capped, rights-aware and owner-controlled; no autonomous public publication.
+
+## Later — Independent creator submissions
+Following reliable owner-driven production and Reader integration, add creator onboarding, rights attestations, workspace isolation, automated content screening, editorial review, moderation, attribution and eventual creator earnings subject to business/legal validation. See [CREATOR_ECOSYSTEM_FUTURE.md](CREATOR_ECOSYSTEM_FUTURE.md).
 
 ## Stage 6 — Pilot and release
 Deliver: end-to-end regressions, accessibility and Indic-script testing, large image/document safety/performance, privacy/legal/license review, actual device tests, creator feedback and monitored public catalog pilot.

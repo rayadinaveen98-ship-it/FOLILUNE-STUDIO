@@ -1,0 +1,11 @@
+{
+  "premise": "A young keeper of a neglected lighthouse discovers that its light once guided memories, not ships. She must decide whether restoring it will help her village or erase what they have chosen to forget.",
+  "language": "en",
+  "genre": "atmospheric fantasy",
+  "audience": "young adult and general readers",
+  "style": "poetic but clear, emotionally grounded, distinct original characters, complete ending",
+  "constraints": "Avoid resemblance to existing fictional franchises. Make the village and its history original. Do not use real people.",
+  "sections": 3,
+  "maxCalls": 10,
+  "maxOutputTokens": 2200
+}

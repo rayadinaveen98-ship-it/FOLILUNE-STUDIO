@@ -53,6 +53,7 @@ export function simulatedProvider({failAt = null} = {}) {
     async generate({role,prompt}) {
       calls++;
       if (calls===failAt) throw new Error('Simulated provider failure');
+      if (role === 'ideation') return {data:{premise:'A quiet cartographer in a mountain village discovers a map that changes whenever a forgotten promise is remembered. She must find the mapmaker before the village erases its own history.',genre:'mystery fantasy'},usage:{inputTokens:35,outputTokens:75}};
       if (role === 'planner') return {data:{title:'The Lantern Beyond the Mist',summary:'A synthetic sample about an old bridge and a lost lantern.',setting:'An invented village in a misty valley',tone:'gentle mystery',characters:[{name:'Asha',trait:'curious'},{name:'Dev',trait:'thoughtful'}],outline:Array.from({length:Number(/SECTION_COUNT:\s*(\d+)/.exec(prompt)?.[1] ?? 3)},(_,i)=>({title:`Part ${i+1} — The Crossing`,beat:`Asha discovers another clue in movement ${i+1}.`}))},usage:{inputTokens:20,outputTokens:100}};
       if (role === 'story-bible') return {data:{bible:'Asha is curious; Dev is thoughtful. Their village has a bridge and a lantern. The lantern stays missing until the final movement.'},usage:{inputTokens:25,outputTokens:50}};
       if (role === 'writer') return {data:{text:words('Original synthetic chapter',Number(/SECTION_NUMBER:\s*(\d+)/.exec(prompt)?.[1] ?? 1))},usage:{inputTokens:100,outputTokens:360}};

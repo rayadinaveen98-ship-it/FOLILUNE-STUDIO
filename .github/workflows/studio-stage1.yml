@@ -1,0 +1,41 @@
+name: Studio Stage 1 verification
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'prototypes/studio-stage1-v4.html'
+      - 'tests/**'
+      - 'fixtures/**'
+      - 'scripts/**'
+      - '.github/workflows/studio-stage1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  epub-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Generate EPUB samples and execute packager tests
+        run: node tests/epub-export.test.mjs
+      - name: Verify ZIP and XHTML structure
+        run: python3 tests/epub-structure.py
+      - name: Official EPUBCheck
+        run: bash scripts/verify-epubcheck.sh
+  chromium-restart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install playwright==1.57.0
+      - run: python -m playwright install --with-deps chromium
+      - run: python tests/real-browser-persistence.py

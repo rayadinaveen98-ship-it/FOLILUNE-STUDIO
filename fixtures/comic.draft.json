@@ -1,0 +1,44 @@
+{
+  "kind": "folilune-studio-draft",
+  "schemaVersion": "0.1.0",
+  "warning": "Private authoring interchange only. Not a Reader publication package.",
+  "project": {
+    "id": "fixture-work-comic",
+    "format": "comic",
+    "title": "The Last Paper Star",
+    "subtitle": "",
+    "language": "en",
+    "summary": "An original miniature comic.",
+    "storyBible": "Original fictional characters and settings.",
+    "sections": [
+      {
+        "id": "comic-section-1",
+        "role": "page",
+        "title": "Page One",
+        "body": {
+          "format": "plain-text",
+          "text": "Panel 1: a child holds a paper star. Dialogue: Is it really mine?"
+        },
+        "artwork": {
+          "id": "comic-section-1:artwork",
+          "dataUrl": "data:image/png;base64,iVBORw0KGgo=",
+          "altText": "A child holding a paper star"
+        }
+      },
+      {
+        "id": "comic-section-2",
+        "role": "page",
+        "title": "Page Two",
+        "body": {
+          "format": "plain-text",
+          "text": "Panel 2: the star catches the morning light. Dialogue: It always was."
+        },
+        "artwork": {
+          "id": "comic-section-2:artwork",
+          "dataUrl": "data:image/png;base64,iVBORw0KGgo=",
+          "altText": "A paper star glowing in the morning"
+        }
+      }
+    ]
+  }
+}

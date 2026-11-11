@@ -1,10 +1,21 @@
 # Functional Specification — FOLILUNE Studio
 **Status:** Proposed; not implemented. All implementation phases are subject to acceptance gates.
 
-## Core user journey
-Create project → choose publication format → author and assemble → attach rights/provenance → revise → run checks → preview exact candidate → request editorial approval → owner approves a specific revision → owner separately releases → catalog indexes immutable artifact → compatible Reader opens or clearly rejects it.
+## Core user journey — autonomous first
+Owner defines/approves a creative brief (or authorizes a bounded production queue) → autonomous planner proposes structure and Story Bible → writing engine generates complete sections → editorial reviewers identify problems → targeted automatic revisions → illustration/panel composition where format requires → package and deterministic QA → owner reviews complete work and may request changes → owner approves a specific candidate → owner separately publishes through authorized service → compatible Reader receives publication.
 
-## V1 capabilities (first vertical slice)
+**Priority correction:** Automated generation and orchestration are not optional later enhancements; they are FOLILUNE Studio's primary value proposition. Existing manual authoring features provide an oversight/repair interface and infrastructure. The first engine MVP is a multi-section, end-to-end generated original short story with an auditable revision trail and experimental EPUB for owner review; Reader publication is gated separately.
+
+## Autonomous production capabilities — primary scope
+- Brief setup: genre, language, audience, length/format, creative constraints, preferred output, model/provider and maximum spend; a clearly visible Start production action.
+- Orchestration: stages for outline, Story Bible, complete drafts, editorial critique and revision, format-specific artwork/lettering, QA and export; status, resumability, bounded retries and failure diagnostics.
+- Full content outputs, not only ideas, prompts or planning documents. A work cannot be called complete until required chapters/pages and actual assets are generated/assembled.
+- Run controls: pause/resume, cancel, redo chapter or page, protect human-locked changes, compare revisions, inspect provenance and costs.
+- Owner review: finished candidate, visual/reader preview where supported, editorial findings, revision requests and explicit approval. Release remains a separate authenticated action.
+- Optional future authorized recurrence: autonomous batch jobs under limits; never silent public publishing.
+- First acceptance test: an approved short-story brief produces all sections and a substantive revision pass with no per-chapter prompting, within a controlled job budget. See [AUTONOMOUS_CREATION_ENGINE.md](AUTONOMOUS_CREATION_ENGINE.md).
+
+## Supporting authoring and publication capabilities (existing Stage 1 foundation)
 ### 1. Workspace and projects
 - Project dashboard: continue work, projects, recent edits, pending reviews; no clutter.
 - Create project types: prose/short story, illustrated story, comic. Form fields adapt to type.
@@ -51,8 +62,8 @@ Create project → choose publication format → author and assemble → attach 
 - Reusable templates, in-app tutorials, layout presets and assisted exports.
 
 ## Optional later expansions (not approved for V1)
-- Explicitly invoked AI assistants: writing critique, outlines, comic breakdown, alternate copy, illustration generation. All suggestions remain drafts and show provenance/cost.
-- Collaborative roles, editorial assignments, review queues.
+- Premium specialized agents and additional model integrations beyond the first autonomous workflow, with transparent cost and privacy settings.
+- Multi-creator submissions, collaborative roles, editorial assignments, review queues (see CREATOR_ECOSYSTEM_FUTURE.md).
 - Language variants with per-language approval.
 - Audiobook and synchronized narration, interactive branching fiction.
 - Paid titles, storefront operations, reader opt-in analytics and scheduled serialized releases.
@@ -67,4 +78,4 @@ Create project → choose publication format → author and assemble → attach 
 - Every release must be reproducible from an immutable snapshot and pinned toolchain.
 
 ## Product decision points
-Define the initial editor and offline storage approach after tests; set first Reader compatibility baseline; approve first real comic delivery strategy; prioritize AI/cloud only after core editorial-to-reader flow works.
+Define local-versus-cloud AI execution economics, safe job orchestration and budget enforcement; complete the autonomous short-story MVP before expanding to more formats. Establish first Reader compatibility baseline and first comic delivery strategy; cloud providers are opt-in rather than an assumption.

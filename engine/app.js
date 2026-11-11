@@ -136,3 +136,23 @@ async function startPrivateBatch(event){
 $('queueForm').addEventListener('submit',startPrivateBatch);
 refreshQueue();
 queueTimer=setInterval(refreshQueue,3500);
+
+// Read-only future publishing factory plan: never starts paid jobs or publishes.
+async function loadDailyFactoryPlan(){
+  const status=$('factoryStatus'),items=$('factorySlots');if(!status||!items)return;
+  try{
+    const response=await fetch('/api/factory/plan');const data=await response.json();if(!response.ok)throw Error(data.error||'Plan unavailable');
+    const plan=data.plan||{},journal=data.journal||{};
+    status.textContent=`${plan.date||'Today'} · ${plan.worksPerDay||0} planned story slots · ${plan.enabled?'Private schedule authorized':'Schedule OFF'} · Publishing OFF`;
+    items.replaceChildren();
+    for(const slot of plan.slots||[]){
+      const card=document.createElement('div');card.className='queue-item';
+      const heading=document.createElement('strong');heading.textContent=`Story ${slot.index} · ${slot.genre}`;
+      const detail=document.createElement('div');detail.className='queue-meta';
+      const found=(journal.slots||[]).find(s=>s.key===slot.key);
+      detail.textContent=`Language ${slot.language} · ${found?.status??'Planned only'} · ${plan.mode==='simulated'?'Synthetic test policy':'Managed policy'}`;
+      card.append(heading,detail);items.append(card);
+    }
+  }catch(e){status.textContent='Daily factory plan unavailable: '+e.message;}
+}
+loadDailyFactoryPlan();

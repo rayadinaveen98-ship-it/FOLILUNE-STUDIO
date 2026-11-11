@@ -18,5 +18,6 @@ check('Duplicate section IDs rejected',()=>{const x=structuredClone(prose);x.pro
 check('Invalid language rejected',()=>{const x=structuredClone(prose);x.project.language='<script>';assert.throws(()=>buildExperimentalEpub(x),/Language/)});
 check('WebP rejected',()=>{const x=structuredClone(ill);x.project.sections[0].artwork.dataUrl='data:image/webp;base64,UklGRg==';assert.throws(()=>buildExperimentalEpub(x),/PNG or JPEG/)});
 check('Invalid JPEG bytes rejected',()=>{const x=structuredClone(ill);x.project.sections[0].artwork.dataUrl='data:image/jpeg;base64,AAAA';assert.throws(()=>buildExperimentalEpub(x),/do not match/)});
+check('Missing illustration alt text rejected',()=>{const x=structuredClone(ill);x.project.sections[0].artwork.altText=' ';assert.throws(()=>buildExperimentalEpub(x),/alt text/)});
 check('Markup is treated as text',()=>{const x=structuredClone(prose);x.project.sections[0].body.text='<script>alert(1)</script> & text';assert.ok(buildExperimentalEpub(x).length>1000)});
-console.log('PASS '+checks.length+'/9 packager unit checks');
+console.log('PASS '+checks.length+'/10 packager unit checks');

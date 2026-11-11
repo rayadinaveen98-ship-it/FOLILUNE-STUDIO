@@ -1,3 +1,17 @@
+> **2026-11-11 Master Planning Update:** The owner’s intended product is a fully autonomous original-content publishing house, aiming for **ten complete short-story candidates each day**, plus separately scheduled novels, illustrated works and comics, delivered to Reader only after explicit approval. The v0.4 local Ollama prototype does **not** do this today. The authoritative product and engineering plan is below; older v0.4 instructions describe a historical experiment, not the final owner experience.
+
+## Master plan — source of truth
+- [Master product vision, full publishing ecosystem and genre/format lanes](docs/MASTER_PRODUCT_PLAN.md)
+- [Production engine, durable jobs, managed inference and Reader integration architecture](docs/ENGINE_PLATFORM_ARCHITECTURE.md)
+- [Editorial standards and format-specific quality gates](docs/EDITORIAL_QUALITY_AND_FORMATS.md)
+- [Milestone delivery roadmap, exit tests and exact next implementation priority](docs/DELIVERY_ROADMAP_MASTER.md)
+- [Daily capacity, AI/hosting costs, spend caps, privacy and authorization](docs/COST_CAPACITY_AND_GOVERNANCE.md)
+- [Future independent creators and curated submissions](docs/CREATOR_ECOSYSTEM_FUTURE.md)
+
+**Immediate execution sequence:** real managed generation without owner model setup → genuinely complete original short story and editorial review → authenticated approved Reader test publication → scale short stories through measured 1/3/5/10 per-day stages → novels/serials + real illustrated/comic works → creator participation. Synthetic demos, incomplete manuscripts, prompt-only comics and unapproved catalog entries do not count.
+
+---
+
 # FOLILUNE Studio — Stage 1A Autonomous Creation Engine — v0.4
 
 **Private creative production prototype · no public publishing**
@@ -102,7 +116,7 @@ The tests use **synthetic content** and a local HTTP stub for the Ollama adapter
 - The browser console now includes a bounded private idea queue; `auto-queue.mjs` remains supported as a CLI.
 - An error may consume a configured call attempt. Resume may require raising the limit in a *new* job rather than editing an existing brief.
 
-## Roadmap
-Next: browser UI for explicitly authorized private idea queue, formal model-output schemas and bounded retries, real local-model quality evaluation, EPUBCheck/Reader fidelity, then immutable owner approval → safe publishing.
+## Historical v0.4 roadmap
+Superseded by [Master delivery roadmap](docs/DELIVERY_ROADMAP_MASTER.md). v0.4 cannot operate as a deployed daily publishing factory.
 
 See [Stage 1A v0.2 verification](docs/STAGE1A_V02_REPORT.md) for exact test evidence and limitations. Independent creator uploads remain a future moderated platform phase.

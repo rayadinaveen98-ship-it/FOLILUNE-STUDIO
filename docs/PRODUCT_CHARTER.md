@@ -2,10 +2,10 @@
 **Status:** Proposed foundation, awaiting product-owner review. **Date:** 2026-11-11.
 
 ## Mission
-Make it possible for one creator to develop, produce, quality-check, approve and publish beautiful original literary experiences without having to operate a different production system for novels, short stories, illustrated fables and comics.
+Build an autonomous creative production engine that independently plans, writes, revises, illustrates, assembles and quality-checks original literary works from a user-approved brief or pre-authorized production queue. The human owner controls editorial direction, budgets, rights and final approval; no work is publicly published without a separate authorization. The manual writing workspace remains available as a correction and management tool.
 
 ## Product promise
-A calm and approachable creative workspace with powerful, discoverable tools beneath the surface. The creator remains the author and final decision-maker. The finished work should feel native to FOLILUNE Reader, not like an uploaded document bolted onto its UI.
+A calm command center for commissioning complete original stories, fables, novels and comics instead of requiring a human to construct every chapter or panel by hand. A capable autonomous engine executes production workflows, records provenance and submits finished candidate works for owner review. The creator remains the final editorial decision-maker. The finished work should feel native to FOLILUNE Reader, not like an uploaded document bolted onto its UI.
 
 ## Product boundary
 FOLILUNE Studio is the **private authoring and release control plane**. FOLILUNE Reader is the **public consumption plane**. A publishing service bridges them through a versioned contract and explicit release approval. Studio must not mutate Reader code or design by itself.
@@ -20,7 +20,7 @@ No marketplace or open creator signup in V1.
 1. **Story first.** Creative quality, readability, editorial integrity and accessibility outrank novelty.
 2. **Quiet surface, deep capabilities.** Progressive disclosure; don't present every tool at once.
 3. **Format-aware, not format-locked.** Common publishing primitives, specialist authoring workflows for prose and comics.
-4. **Author remains in control.** AI can assist, critique, propose or generate drafts; it cannot silently overwrite approved work.
+4. **Autonomy is the core capability.** The engine performs production stages proactively within a controlled brief and budget. It must never silently overwrite approved or human-locked content.
 5. **No implicit publication.** Save, review approval and public release are different actions.
 6. **Reader fidelity is a release criterion.** Preview must use the actual supported renderer and the exact release candidate, not a decorative approximation.
 7. **No regression by integration.** Studio and Reader evolve independently; integrations require explicit gates, compatibility checks and rollback.
@@ -36,10 +36,10 @@ No marketplace or open creator signup in V1.
 - Comics: page and panel sequencing, artwork, lettering and reading direction.
 - Story Bible: characters, relationships, visual references, timeline and continuity.
 - Production: editorial checklist, rights registry, asset preparation, metadata, preview, approval, export, release and rollback.
-- Optional later AI assistance, localization, narration, serial release and collaborators.
+- Core autonomous multi-stage creation (planning, drafting, editorial revision, illustrations where required, comic composition, QA and review). Optional later localization, narration, serialized release and broader collaboration.
 
 ## Explicit non-goals for first vertical slice
-- Generating a full professional comic autonomously.
+- Attempting a full-length professional comic or novel before the autonomous short-story production flow works. Autonomy is in scope from the first engine milestone; full-length quality must be staged.
 - Built-in paid AI inference or reliance on paid cloud services.
 - Self-publishing by the public, monetization/paywalls, social features.
 - Replacing the FOLILUNE Reader renderer, changing its theme, or requiring Reader development to stop.
@@ -47,4 +47,7 @@ No marketplace or open creator signup in V1.
 - Hosting unpublished manuscripts in a public GitHub repository.
 
 ## Success definition
-First milestone: create one original short story, one illustrated fable and one miniature comic; preserve draft/revision history; validate each; preview on representative desktop/tablet/phone profiles; approve as owner; publish compatible immutable releases; import or deliver those releases to the Reader without disturbing its existing library. If the comic renderer is unsupported, integration must be explicitly blocked until a safe adapter is demonstrated.
+**First engine milestone:** From one approved creative brief, automatically produce a complete multi-section short story with a Story Bible, at least one editorial review and targeted revision, traceable outputs, bounded costs, manual intervention controls and an experimental EPUB review artifact—without prompting the owner to write each chapter. **Next milestones:** produce an illustrated fable with actual artwork and a mini comic with readable assembled pages; add authenticated approval and verified Reader publication when compatibility gates are met. Longer novels and other works follow iteratively. If the comic renderer is unsupported, integration must be explicitly blocked until a safe adapter is demonstrated.
+
+## Source of truth for automation
+See [AUTONOMOUS_CREATION_ENGINE.md](AUTONOMOUS_CREATION_ENGINE.md). Future creator submissions: [CREATOR_ECOSYSTEM_FUTURE.md](CREATOR_ECOSYSTEM_FUTURE.md). Old references to 'AI later' are superseded by this core-product correction.

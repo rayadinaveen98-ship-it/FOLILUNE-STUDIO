@@ -1,0 +1,21 @@
+{
+  "authorization": "ALLOW_PRIVATE_DRAFT_CREATION_ONLY",
+  "version": 1,
+  "enabled": false,
+  "mode": "simulated",
+  "liveAuthorized": false,
+  "maxDailySpendUSD": 0,
+  "worksPerDay": 3,
+  "maxDailyModelCalls": 130,
+  "maxCallsPerWork": 12,
+  "sections": 3,
+  "maxOutputTokens": 2200,
+  "timezone": "Asia/Kolkata",
+  "runAt": "07:00",
+  "theme": "Original stories about unexpected choices, wonder, courage and the things people leave unsaid.",
+  "genres": ["mystery", "fantasy", "science fiction", "romance", "thriller", "slice of life", "adventure", "fable", "horror", "comedy"],
+  "languages": ["en", "te"],
+  "audience": "general readers",
+  "style": "emotionally grounded, distinct voices and a satisfying original ending",
+  "constraints": "Original characters and settings; no copyrighted franchises or copied passages."
+}

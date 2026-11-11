@@ -1,0 +1,10 @@
+# Private generated manuscripts must never be committed.
+output/
+*.env
+.env*
+!.env.example
+*.key
+*.pem
+*.backup.json
+.DS_Store
+node_modules/

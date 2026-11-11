@@ -3,7 +3,7 @@
 **Code status:** NOT IMPLEMENTED. Existing Studio v4 is a manual authoring/EPUB prototype only.
 
 ## Mission
-The primary capability of FOLILUNE Studio is **automated end-to-end original literary content production**. The system should generate, edit, illustrate, assemble and quality-check works with minimal routine intervention. It may operate from an owner prompt, an approved creative brief or a pre-authorized content schedule. It must NOT publish or grant rights without deliberate authorized review.
+The primary capability of FOLILUNE Studio is **automated end-to-end original literary content production**. The system should generate, edit, illustrate, assemble and quality-check works with minimal routine intervention. It may operate from an owner prompt, an approved creative brief or a pre-authorized content schedule. It must NOT publish or grant rights without deliberate authorized review. The owner may choose a single explicit **Approve & Publish** action: the backend records approval for the exact immutable candidate and, only if all gates still pass, atomically publishes it. **Approve for later** leaves publication pending.
 
 The manual Studio editor is the owner’s intervention, oversight and revision surface—not the dominant experience.
 

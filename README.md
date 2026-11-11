@@ -1,3 +1,9 @@
+> **2026-11-11 Daily Factory v0.5 checkpoint:** A private daily editorial slate, reproducible slots and a crash-safe at-most-once journal are implemented, along with a server-only managed inference adapter. Scheduling defaults OFF and live paid daily generation is BLOCKED until metered billing and secure authorization are built. All tests used a synthetic provider—this is not 10 real stories/day or Reader publishing. See [v0.5 report](docs/DAILY_FACTORY_V05_REPORT.md).
+
+Safe preview with no model or billing: `node engine/daily-cli.mjs plan fixtures/daily-policy.example.json 2026-11-12`. The local Studio console also shows the read-only Daily Factory slate. In the finished product, the owner will not be asked to install or select models; backend inference remains an operator-side responsibility.
+
+---
+
 > **2026-11-11 Master Planning Update:** The owner’s intended product is a fully autonomous original-content publishing house, aiming for **ten complete short-story candidates each day**, plus separately scheduled novels, illustrated works and comics, delivered to Reader only after explicit approval. The v0.4 local Ollama prototype does **not** do this today. The authoritative product and engineering plan is below; older v0.4 instructions describe a historical experiment, not the final owner experience.
 
 ## Master plan — source of truth

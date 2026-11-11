@@ -5,6 +5,7 @@ import {readFile} from 'node:fs/promises';
 import {resolve,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createJob,runJob,jobStatus} from './runner.mjs';
+import {validateProfile,runAuthorizedBatch} from './auto-queue.mjs';
 import {ollamaProvider,simulatedProvider} from './providers.mjs';
 import {requestOwnerRevision,setSectionLock} from './review.mjs';
 
@@ -14,6 +15,19 @@ const root=resolve(process.env.FOLILUNE_OUTPUT || 'output');
 const ui=fileURLToPath(new URL('./studio-console.html',import.meta.url));
 const appJs=fileURLToPath(new URL('./app.js',import.meta.url));
 const jobs=new Map();
+let queueState={active:false,progress:'No authorized private production batch in progress',currentJobId:null,lastResults:[],lastError:null,startedAt:null};
+const anyBusy=()=>queueState.active||[...jobs.values()].some(x=>x.active);
+const queueHistory=async()=>{
+  try{const file=JSON.parse(await readFile(join(root,'private-production-ledger.json'),'utf8'));
+    if(!Array.isArray(file.history))return [];
+    return Promise.all(file.history.slice(-30).reverse().filter(x=>idCheck.test(x.id)).map(async x=>{
+      let title=null,reviewVersion=null;
+      try{const s=await jobStatus(join(root,x.id));title=s.plan?.title??null;reviewVersion=s.reviewVersion??1;}
+      catch{ /* interrupted batch may have no completed project yet */ }
+      return {id:x.id,status:x.status,theme:x.theme,provider:x.provider,model:x.model,createdAt:x.createdAt,error:x.error??null,title,reviewVersion};
+    }));
+  }catch(e){if(e.code==='ENOENT')return [];throw e;}
+};
 const idCheck=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const respond=(res,code,data,mime='application/json; charset=utf-8')=>{res.writeHead(code,{'content-type':mime,'cache-control':'no-store','x-content-type-options':'nosniff','referrer-policy':'no-referrer','content-security-policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'self'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'"});res.end(mime.startsWith('application/json')?JSON.stringify(data):data)};
 const fail=(res,code,message)=>respond(res,code,{error:message});
@@ -26,8 +40,32 @@ const server=createServer(async(req,res)=>{
     if(!validateHost(req)||!validateOrigin(req))return fail(res,403,'Non-loopback host or origin blocked');
     if(req.method==='GET'&&path==='/')return respond(res,200,await readFile(ui,'utf8'),'text/html; charset=utf-8');
     if(req.method==='GET'&&path==='/app.js')return respond(res,200,await readFile(appJs,'utf8'),'text/javascript; charset=utf-8');
+    if(req.method==='GET'&&path==='/api/queue'){
+      return respond(res,200,{...queueState,history:await queueHistory(),publishingEnabled:false});
+    }
+    if(req.method==='POST'&&path==='/api/queue/start'){
+      if(anyBusy())return fail(res,429,'Another production or review job is running');
+      const payload=await jsonBody(req);
+      const profile=validateProfile(payload.profile);
+      const provider=payload.provider==='simulated'?simulatedProvider():payload.provider==='ollama'?ollamaProvider({model:payload.model}):null;
+      if(!provider)return fail(res,400,'Select synthetic test or an installed local Ollama model');
+      queueState={active:true,progress:'Authorized batch queued; only private draft creation permitted',currentJobId:null,lastResults:[],lastError:null,startedAt:new Date().toISOString()};
+      setImmediate(async()=>{
+        try{
+          const results=await runAuthorizedBatch(payload.profile,provider,{outputRoot:root,
+            onJobCreated:x=>{queueState.currentJobId=x.id;queueState.progress=`Producing private work ${x.index}/${x.total}`;jobs.set(x.id,{active:true,progress:queueState.progress});},
+            onJobComplete:x=>{jobs.set(x.id,{active:false,progress:x.status});queueState.progress=`Completed ${x.index}/${x.total}: ${x.status}`;},
+            onProgress:x=>{queueState.progress=x.message||'Generating private draft';if(x.jobId)jobs.set(x.jobId,{active:true,progress:queueState.progress});}
+          });
+          queueState.lastResults=results.map(x=>({id:x.id??null,status:x.status,error:x.error??null}));
+          queueState.progress='Private production batch finished. Review each result before any future release.';
+        }catch(e){queueState.lastError=e.message;queueState.progress=`Private batch stopped: ${e.message}`;}
+        finally{queueState.active=false;queueState.currentJobId=null;for(const [id,item] of jobs)if(item.active)jobs.set(id,{...item,active:false});}
+      });
+      return respond(res,202,{status:'queued',count:profile.works,publishingEnabled:false});
+    }
     if(req.method==='POST'&&path==='/api/run'){
-      if([...jobs.values()].some(x=>x.active))return fail(res,429,'Only one production job at a time in Stage 1A');
+      if(anyBusy())return fail(res,429,'Only one production job at a time in Stage 1A');
       const payload=await jsonBody(req);
       const provider=payload.provider==='simulated'?simulatedProvider():payload.provider==='ollama'?ollamaProvider({model:payload.model}):null;
       if(!provider)return fail(res,400,'Choose simulated or an installed local Ollama model');
@@ -50,7 +88,7 @@ const server=createServer(async(req,res)=>{
         return respond(res,200,result);
       }
       if(which==='revise'&&req.method==='POST'){
-        if([...jobs.values()].some(x=>x.active))return fail(res,429,'Another generation or revision is active');
+        if(anyBusy())return fail(res,429,'Another generation or revision is active');
         const data=await jsonBody(req);const state=await jobStatus(dir);
         if(state.status!=='ready_for_owner_review')return fail(res,409,'Review draft not ready');
         const provider=state.providerKind==='simulated'?simulatedProvider():state.providerKind==='ollama'?ollamaProvider({model:state.model}):null;

@@ -3,6 +3,7 @@ import {join, resolve} from 'node:path';
 import {randomUUID, createHash} from 'node:crypto';
 import {buildExperimentalEpub} from '../src/epub-export.mjs';
 import {validateStudioDraft} from '../src/content-model.mjs';
+import {inspectDraft} from './quality.mjs';
 
 const sha256 = x => createHash('sha256').update(x).digest('hex');
 const atomic = async (path, bytes) => {const tmp=`${path}.${randomUUID()}.tmp`;try {await writeFile(tmp,bytes,{flag:'wx',mode:0o600});await rename(tmp,path);}catch(e){await rm(tmp,{force:true}).catch(()=>{});throw e;}};
@@ -34,7 +35,7 @@ export async function createJob(outputRoot, rawBrief) {
   await mkdir(outputRoot,{recursive:true});
   const jobDir=join(resolve(outputRoot),id);await mkdir(jobDir,{mode:0o700});
   const state={version:1,id,kind:'autonomous-short-story',status:'queued',stage:'plan',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),
-    briefHash:sha256(JSON.stringify(brief)),calls:0,tokenUsage:{input:0,output:0},events:[],sections:[],revisions:[],plan:null,bible:null,critique:null,export:null,qa:null,providerKind:null,model:null};
+    briefHash:sha256(JSON.stringify(brief)),calls:0,tokenUsage:{input:0,output:0},events:[],sections:[],revisions:[],plan:null,bible:null,critique:null,export:null,qa:null,providerKind:null,model:null,reviewVersion:1,reviewArtifacts:null};
   await atomic(join(jobDir,'brief.json'),JSON.stringify(brief,null,2));
   await atomic(join(jobDir,'state.json'),JSON.stringify(state,null,2));
   return jobDir;
@@ -103,12 +104,12 @@ export async function runJob(jobDir,provider,{maxStages=Infinity,onProgress=()=>
         } else if(state.stage==='package'){
           const draft={kind:'folilune-studio-draft',schemaVersion:'0.1.0',warning:'Private AI-generated review draft, not a Reader release package.',project:{id:state.id,format:'prose',title:state.plan.title,subtitle:'',language:brief.language,summary:state.plan.summary,storyBible:state.bible,sections:state.sections.map(s=>({id:s.id,role:'chapter',title:s.title,body:{format:'plain-text',text:s.text},artwork:null}))}};
           const check=validateStudioDraft(draft);
-          const qa={schemaValid:check.ok,errors:check.errors,sections:state.sections.length,minimumWords:100,wordCounts:state.sections.map(s=>words(s.text)),revisionCount:state.revisions.length,realReaderVerified:false,epubCheckVerified:false,rightsCleared:false,provider:state.providerKind,model:state.model};
+          const qa={...inspectDraft(state.sections),schemaValid:check.ok,errors:check.errors,sections:state.sections.length,minimumWords:100,wordCounts:state.sections.map(s=>words(s.text)),revisionCount:state.revisions.length,realReaderVerified:false,epubCheckVerified:false,rightsCleared:false,provider:state.providerKind,model:state.model};
           qa.passed=qa.schemaValid&&qa.sections===brief.sections&&qa.wordCounts.every(w=>w>=100)&&qa.revisionCount>=1;
           await atomic(join(jobDir,'review-draft.json'),JSON.stringify(draft,null,2));
           await atomic(join(jobDir,'qa.json'),JSON.stringify(qa,null,2));
           state.qa=qa;
-          if(qa.passed){const bytes=buildExperimentalEpub(draft);await atomic(join(jobDir,'review-only.epub'),Buffer.from(bytes));state.export={file:'review-only.epub',sha256:sha256(bytes),bytes:bytes.length};state.status='ready_for_owner_review';}
+          if(qa.passed){const bytes=buildExperimentalEpub(draft);await atomic(join(jobDir,'review-only.epub'),Buffer.from(bytes));state.export={file:'review-only.epub',sha256:sha256(bytes),bytes:bytes.length};state.reviewArtifacts={draft:'review-draft.json',epub:'review-only.epub',qa:'qa.json'};state.reviewVersion=1;state.status='ready_for_owner_review';}
           else{state.status='needs_attention';state.export=null;}
           state.stage='done';await save({message:qa.passed?'Review draft and EPUB ready. Publishing blocked.':'QA incomplete; no EPUB release candidate.'});break;
         } else break;

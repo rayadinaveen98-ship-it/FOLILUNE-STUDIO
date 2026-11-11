@@ -1,68 +1,91 @@
-# FOLILUNE Studio
+# FOLILUNE Studio — Stage 1A Autonomous Creation Engine — v0.2
 
-**Create with intention. Publish with confidence.**
+**Private creative production prototype · no public publishing**
 
-FOLILUNE Studio is an **autonomous literary creation and publishing system**, not primarily a manual writing editor. Its central engine will plan, write, revise, illustrate and assemble original prose, stories, fables, comics and future reading experiences, with owner-controlled budgets and a mandatory explicit approval gate before publishing. The manual editor is an oversight and correction tool. It is developed independently of FOLILUNE Reader and sends content to that app only through a versioned, validated, explicitly approved publishing process.
+This is the first executable autonomous story engine and its v0.2 owner-review update. It can use an explicitly selected **local Ollama model** to propose an original premise, plan an outline, write the complete 3–5-section story, run an editorial critique, revise a section, and prepare an experimental EPUB for human review.
 
-## Status
+A **synthetic provider** is included only to test pipeline reliability; its output is deliberately repetitive and must not be mistaken for a real AI-authored literary work.
 
-**Stage 1A — autonomous prose engine v0.1 (2026-11-11), acceptance incomplete.** A local runnable pipeline exists alongside the earlier Studio v4 prototype. Only synthetic/stub integration tests have passed. There is no production backend, release service, Reader integration, or proven real-model literary quality.
+## What you need
+- Windows/macOS/Linux with **Node.js 22+**.
+- For genuine model generation, **Ollama** and an appropriate locally installed text model. This kit does not automatically install or pay for a model.
+- Use a model suitable for your language and available RAM; quality and performance are not guaranteed.
 
-## Corrected primary roadmap (2026-11-11)
+## 1. Try the studio console (Windows)
+Double-click `START_STUDIO_WINDOWS.bat`, then open `http://127.0.0.1:44831` in Chrome/Edge. Use **Test workflow (synthetic)** to verify the whole pipeline without a model. If Ollama is already running, enter the name of your installed model and use **Generate with local model**.
 
-- **CONFIRMED direction:** autonomous story/comic production is the core product; it was incorrectly deferred in the earlier manual-editor-first plan.
-- [Autonomous creation engine — pipeline, roles, budgets, controls and first MVP](docs/AUTONOMOUS_CREATION_ENGINE.md)
-- [Future independent creators — submission workflow, rights and editorial governance](docs/CREATOR_ECOSYSTEM_FUTURE.md)
-- **Actual progress:** Stage 1A adds a runnable automated multi-stage PROSE writing engine and an opt-in local idea-generation queue. Only synthetic/stub runs have been verified; no installed real model, auto-scheduler, image pipeline, approval backend or Reader publishing has been verified or implemented.
+From a terminal (all systems):
 
-## Stage 1A — Autonomous engine v0.1 (working local prototype, NOT published)
-- [Autonomous production source](engine/runner.mjs), [local model adapter](engine/providers.mjs), [CLI](engine/cli.mjs), [authorized automatic idea queue](engine/auto-queue.mjs), and [localhost console](engine/server.mjs).
-- [Run guide](docs/STAGE1A_USER_GUIDE.md), [verification report](docs/STAGE1A_IMPLEMENTATION_REPORT.md), [tests](tests/autonomous.test.mjs), and [CI workflow](.github/workflows/studio-autonomy-stage1a.yml).
-- **10/10 local Node synthetic/stub tests passed.** Actual installed-model generation, editorial quality, real Reader fidelity and official EPUBCheck are NOT verified.
-- No approval or public publishing endpoint exists. The `output/` private manuscript directory is Git-ignored. FOLILUNE Reader repository unchanged.
+```bash
+node engine/server.mjs
+```
 
-## Stage 1 v4 — working proof (not production)
+The console binds to `127.0.0.1` only; it has no internet-facing authentication. Don't reverse-proxy or expose it publicly.
 
-- [Standalone Studio v4](prototypes/studio-stage1-v4.html): local drafts, experimental EPUB export, and browser-recovery diagnostic.
-- [v4 verification report](docs/STAGE1_V4_REPORT.md): actual passing checks vs. blocked tests.
-- [Real browser restart test](tests/real-browser-persistence.py) and [official EPUBCheck runner](scripts/verify-epubcheck.sh) are committed. A GitHub Actions workflow exists, but a successful run has not been independently verified.
-- **No Reader integration or public publishing.** Actual persistent storage, EPUBCheck conformance, and FOLILUNE Reader fidelity remain open gates.
+## 2. Actual autonomous writing from a creative brief
+With Ollama running and a model installed:
 
-## Non-negotiable boundaries
+```bash
+node engine/cli.mjs run fixtures/brief.json --provider ollama --model YOUR_INSTALLED_MODEL
+```
 
-- `FOLILUNE-STUDIO` contains Studio planning and future Studio code only.
-- The existing `FOLILUNE` repository and its Modern Atelier Reader design are not changed by this project.
-- Draft content is private; nothing enters a public catalog without authenticated owner approval and a separate publish action.
-- The public repo contains no private manuscripts, API keys, credentials, or unpublished illustrations.
-- Compatibility with Reader is tested against real supported reader versions; features are gated until that evidence exists.
+This performs **seven model calls for a 3-section story**: plan, Story Bible, 3 chapters, critique, revision. All state is checkpointed in `output/JOB_ID/`. Exact results depend on model instruction-following and creative capability. A failure safely leaves a checkpoint. To continue:
 
-## Stage 1 prototype and verification
+```bash
+node engine/cli.mjs resume output/JOB_ID --provider ollama --model SAME_MODEL
+```
 
-- [Current v3 authoring prototype with experimental EPUB export](prototypes/studio-stage1-v3.html)
-- [EPUB exporter source](src/epub-export.mjs)
-- [v3 verification report and open gates](docs/STAGE1_V3_REPORT.md)
-- [Packager unit checks](tests/epub-export.test.mjs) and [structural EPUB checks](tests/epub-structure.py)
+## 3. Truly auto-initiated *private* story creation
+Set `fixtures/autonomy-profile.json` to your **approved** theme, language, limitations and `worksPerRun` (1–2). It contains `authorization: ALLOW_PRIVATE_DRAFT_CREATION_ONLY`.
 
-## Earlier Stage 1 prototype
+Then run:
 
-- [Open Stage 1 v2 interactive Studio prototype](prototypes/studio-stage1-v2.html) (download Raw HTML to test locally)
-- [Latest v2 reliability and test report](docs/STAGE1_V2_REPORT.md)
-- [Private structured draft contract](contracts/studio-draft.v0.1.schema.json) and [draft model adapter](src/content-model.mjs)
-- [Prose](fixtures/prose.draft.json), [illustrated](fixtures/illustrated.draft.json) and [comic](fixtures/comic.draft.json) test fixtures
-- [Current Studio-to-Reader compatibility assessment](docs/READER_COMPATIBILITY_V1.md)
-- [Previous v1 prototype](prototypes/studio-stage1-v1.html) and [v1 report](docs/STAGE1_V1_REPORT.md)
+```bash
+node engine/auto-queue.mjs fixtures/autonomy-profile.json ollama YOUR_INSTALLED_MODEL
+```
 
-## Documentation
+This first asks the local model to devise an original premise from the theme, then runs the complete production pipeline **without requiring a per-story prompt**. A private ledger helps reject exact duplicate premises. No public publishing is possible. You can later schedule this command through a local operating-system scheduler **only after deliberately configuring that schedule**; there is no silent background task in this kit.
 
-- [Product charter & principles](docs/PRODUCT_CHARTER.md)
-- [Functional specification](docs/FUNCTIONAL_SPEC.md)
-- [Experience architecture](docs/EXPERIENCE_ARCHITECTURE.md)
-- [Domain model](docs/DOMAIN_MODEL.md)
-- [Technical architecture](docs/TECHNICAL_ARCHITECTURE.md)
-- [Publication contract](docs/PUBLICATION_CONTRACT.md)
-- [Publication manifest JSON Schema — RFC v0.1](contracts/publication-manifest.v0.1.schema.json)
-- [Security, privacy & rights](docs/SECURITY_RIGHTS.md)
-- [Roadmap & acceptance gates](docs/ROADMAP.md)
-- [Decision register](docs/DECISIONS.md)
+## Owner-directed chapter revisions (v0.2)
 
-Our first target is an **autonomous short-story production MVP** that produces a complete original draft, revision evidence, and experimental EPUB for owner review; next is verified approval-to-Reader publication. Illustrated fables and assembled mini comics follow. Reader code remains untouched unless a separately approved integration task is necessary.
+Once a synthetic or real-model job reaches **Ready for owner review**, you can use the browser console to:
+
+- **Lock** any chapter that should not be regenerated.
+- Select one unlocked chapter, enter a clear revision instruction (12–1200 characters), and press **Regenerate selected chapter**.
+- Review a new immutable private review version (`review-draft-v2.json`, `review-only-v2.epub`), while the original review remains on disk.
+- Download the latest private draft and experimental EPUB from the same links.
+
+Each targeted revision consumes one remaining model-call allowance; stale revision requests and attempts to modify a locked chapter are refused. The selected model is fixed for the job. A failed revision cannot replace the last completed review. Deterministic metrics now flag severe repetition/short sections, but **never certify literary quality, copyright originality or continuity**. This is still an owner-review proof, not a public release system.
+
+## 4. Safe verification without Ollama
+
+```bash
+npm test
+python tests/server-integration.py
+npm run simulate
+npm run simulate:auto
+```
+
+The tests use **synthetic content** and a local HTTP stub for the Ollama adapter. They do NOT demonstrate real narrative quality.
+
+## Artifacts and privacy
+- `output/JOB_ID/state.json`: stage log, checkpoints, request counts and revisions.
+- `output/JOB_ID/review-draft.json`: private manuscript compatible with Studio's existing draft schema.
+- `output/JOB_ID/review-only.epub`: *experimental* offline EPUB (not a verified Reader release).
+- `output/private-production-ledger.json`: pre-authorized batch history.
+
+**Do not upload `output/` to public GitHub.** It is ignored in `.gitignore`.
+
+## Known limitations
+- Only prose/short stories: illustrated fables, artwork, comics and novels are future engineering stages.
+- Real Ollama model generation not run in this build environment; tests proved request formatting using a local stub only.
+- Neither an approval backend nor a public Reader catalog has been implemented. Reader code is untouched. No public publish APIs exist.
+- Publisher rights, EPUBCheck compliance, real Reader rendering and literary quality remain review gates.
+- No hardened paid-cloud billing enforcement; local Ollama is the only real provider in this build. Request caps bound model calls, not electricity, time, or total monetary spend.
+- The browser console lacks an automatic-ideation button; use `auto-queue.mjs` for story creation without a per-story premise.
+- An error may consume a configured call attempt. Resume may require raising the limit in a *new* job rather than editing an existing brief.
+
+## Roadmap
+Next: browser UI for explicitly authorized private idea queue, formal model-output schemas and bounded retries, real local-model quality evaluation, EPUBCheck/Reader fidelity, then immutable owner approval → safe publishing.
+
+See [Stage 1A v0.2 verification](docs/STAGE1A_V02_REPORT.md) for exact test evidence and limitations. Independent creator uploads remain a future moderated platform phase.

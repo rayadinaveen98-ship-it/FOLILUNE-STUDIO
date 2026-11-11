@@ -6,7 +6,7 @@ FOLILUNE Studio is a private, creator-first publishing workspace for original pr
 
 ## Status
 
-**Stage 0 — foundation and architecture (2026-11-11).** Design and technical architecture are proposals until reviewed and accepted. No production Studio or publishing backend has been implemented.
+**Stage 1 — interactive prototype v1 (2026-11-11), acceptance incomplete.** Foundation documentation is committed and a standalone local-first authoring prototype exists. There is no production backend, release service, Reader integration, or proven physical-device persistence.
 
 ## Non-negotiable boundaries
 
@@ -15,6 +15,11 @@ FOLILUNE Studio is a private, creator-first publishing workspace for original pr
 - Draft content is private; nothing enters a public catalog without authenticated owner approval and a separate publish action.
 - The public repo contains no private manuscripts, API keys, credentials, or unpublished illustrations.
 - Compatibility with Reader is tested against real supported reader versions; features are gated until that evidence exists.
+
+## Testable Stage 1 prototype
+
+- [Open the standalone Studio prototype source](prototypes/studio-stage1-v1.html) (download Raw HTML to test locally)
+- [Stage 1 v1 verification report and limitations](docs/STAGE1_V1_REPORT.md)
 
 ## Documentation
 

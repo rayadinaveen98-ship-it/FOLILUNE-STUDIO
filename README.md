@@ -6,7 +6,14 @@ FOLILUNE Studio is a private, creator-first publishing workspace for original pr
 
 ## Status
 
-**Stage 1 — interactive prototype v2 (2026-11-11), acceptance incomplete.** Foundation documentation is committed and a standalone local-first authoring prototype exists. There is no production backend, release service, Reader integration, or proven physical-device persistence.
+**Stage 1 — interactive prototype v4 (2026-11-11), acceptance incomplete.** Foundation documentation is committed and a standalone local-first authoring prototype exists. There is no production backend, release service, Reader integration, or proven physical-device persistence.
+
+## Stage 1 v4 — working proof (not production)
+
+- [Standalone Studio v4](prototypes/studio-stage1-v4.html): local drafts, experimental EPUB export, and browser-recovery diagnostic.
+- [v4 verification report](docs/STAGE1_V4_REPORT.md): actual passing checks vs. blocked tests.
+- [Real browser restart test](tests/real-browser-persistence.py) and [official EPUBCheck runner](scripts/verify-epubcheck.sh) are committed. A GitHub Actions workflow exists, but a successful run has not been independently verified.
+- **No Reader integration or public publishing.** Actual persistent storage, EPUBCheck conformance, and FOLILUNE Reader fidelity remain open gates.
 
 ## Non-negotiable boundaries
 

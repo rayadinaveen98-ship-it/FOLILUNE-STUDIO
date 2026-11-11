@@ -48,6 +48,7 @@ with tempfile.TemporaryDirectory(prefix='folilune_queue_http_') as tmp:
         assert q['publishingEnabled'] is False
         assert q['lastError'] is None,q
         assert len(q['lastResults'])==2,q['lastResults']
+        assert '1 duplicate ideas skipped' in q['progress']
         assert {x['status'] for x in q['lastResults']}=={'ready_for_owner_review','duplicate-blocked'},q['lastResults']
         assert len(q['history'])==1,q['history']
         record=q['history'][0]; assert record['status']=='ready_for_owner_review'

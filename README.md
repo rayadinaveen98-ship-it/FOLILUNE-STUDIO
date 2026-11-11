@@ -1,4 +1,4 @@
-# FOLILUNE Studio — Stage 1A Autonomous Creation Engine — v0.2
+# FOLILUNE Studio — Stage 1A Autonomous Creation Engine — v0.3
 
 **Private creative production prototype · no public publishing**
 
@@ -10,6 +10,14 @@ A **synthetic provider** is included only to test pipeline reliability; its outp
 - Windows/macOS/Linux with **Node.js 22+**.
 - For genuine model generation, **Ollama** and an appropriate locally installed text model. This kit does not automatically install or pay for a model.
 - Use a model suitable for your language and available RAM; quality and performance are not guaranteed.
+
+## Stage 1A v0.3 — private idea-to-story batches
+
+- The **Let Studio invent the premise** section now creates owner-authorized batches of 1–2 private short-story drafts, with theme, language, genre, sections, model mode and capped model calls.
+- Completed drafts can be reopened from the on-disk production history, chapter-locked/revised and exported as private review EPUBs.
+- Explicit authorization is required per batch. No publishing or Reader integration exists.
+- [Detailed v0.3 setup instructions](docs/STAGE1A_V03_ENGINE_README.md) · [Implementation/test report](docs/STAGE1A_V03_REPORT.md).
+- **Tests:** 15/15 synthetic engine checks, real local HTTP manual and queue integration, 3 responsive browser UI mock-HTTP checks. Real Ollama creative quality remains unverified.
 
 ## 1. Try the studio console (Windows)
 Double-click `START_STUDIO_WINDOWS.bat`, then open `http://127.0.0.1:44831` in Chrome/Edge. Use **Test workflow (synthetic)** to verify the whole pipeline without a model. If Ollama is already running, enter the name of your installed model and use **Generate with local model**.
@@ -82,7 +90,7 @@ The tests use **synthetic content** and a local HTTP stub for the Ollama adapter
 - Neither an approval backend nor a public Reader catalog has been implemented. Reader code is untouched. No public publish APIs exist.
 - Publisher rights, EPUBCheck compliance, real Reader rendering and literary quality remain review gates.
 - No hardened paid-cloud billing enforcement; local Ollama is the only real provider in this build. Request caps bound model calls, not electricity, time, or total monetary spend.
-- The browser console lacks an automatic-ideation button; use `auto-queue.mjs` for story creation without a per-story premise.
+- The browser console now includes a bounded private idea queue; `auto-queue.mjs` remains supported as a CLI.
 - An error may consume a configured call attempt. Resume may require raising the limit in a *new* job rather than editing an existing brief.
 
 ## Roadmap

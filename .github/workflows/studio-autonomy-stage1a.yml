@@ -29,5 +29,6 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check engine/server.mjs
+          node --check engine/model-preflight.mjs
           node --check engine/auto-queue.mjs
           node --check engine/app.js

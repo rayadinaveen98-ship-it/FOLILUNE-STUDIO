@@ -21,8 +21,8 @@
         },
         "artwork": {
           "id": "illustrated-section-1:artwork",
-          "dataUrl": "data:image/png;base64,iVBORw0KGgo=",
-          "altText": ""
+          "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAIAAADYYG7QAAAAS0lEQVR4nO3OMQHAIADAMMDtTGABy/v39GRHoiDz2Wf8ybod+BIqQkWoCBWhIlSEilARKkJFqAgVoSJUhIpQESpCRagIFaEiVITKC+vSAdbCHNiJAAAAAElFTkSuQmCC",
+          "altText": "Blue-grey dawn over the fictional village"
         }
       },
       {
@@ -35,8 +35,8 @@
         },
         "artwork": {
           "id": "illustrated-section-2:artwork",
-          "dataUrl": "data:image/png;base64,iVBORw0KGgo=",
-          "altText": ""
+          "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAIAAADYYG7QAAAAS0lEQVR4nO3OMQHAIADAMMDqtGACtfv39GRHoiDz7Gf8ybod+BIqQkWoCBWhIlSEilARKkJFqAgVoSJUhIpQESpCRagIFaEiVITKCzJ1AeJOvoWPAAAAAElFTkSuQmCC",
+          "altText": "Warm light illuminating the path"
         }
       }
     ]

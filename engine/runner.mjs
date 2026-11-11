@@ -3,7 +3,7 @@ import {join, resolve} from 'node:path';
 import {randomUUID, createHash} from 'node:crypto';
 import {buildExperimentalEpub} from '../src/epub-export.mjs';
 import {validateStudioDraft} from '../src/content-model.mjs';
-import {inspectDraft} from './quality.mjs';
+import {inspectDraft,hasBlockingQualityWarnings} from './quality.mjs';
 
 const sha256 = x => createHash('sha256').update(x).digest('hex');
 const atomic = async (path, bytes) => {const tmp=`${path}.${randomUUID()}.tmp`;try {await writeFile(tmp,bytes,{flag:'wx',mode:0o600});await rename(tmp,path);}catch(e){await rm(tmp,{force:true}).catch(()=>{});throw e;}};
@@ -35,7 +35,7 @@ export async function createJob(outputRoot, rawBrief) {
   await mkdir(outputRoot,{recursive:true});
   const jobDir=join(resolve(outputRoot),id);await mkdir(jobDir,{mode:0o700});
   const state={version:1,id,kind:'autonomous-short-story',status:'queued',stage:'plan',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),
-    briefHash:sha256(JSON.stringify(brief)),calls:0,tokenUsage:{input:0,output:0},events:[],sections:[],revisions:[],plan:null,bible:null,critique:null,export:null,qa:null,providerKind:null,model:null,reviewVersion:1,reviewArtifacts:null};
+    briefHash:sha256(JSON.stringify(brief)),calls:0,tokenUsage:{input:0,output:0},events:[],sections:[],revisions:[],plan:null,bible:null,critique:null,export:null,qa:null,providerKind:null,model:null,reviewVersion:1,reviewArtifacts:null,qualityRepairAttempts:0};
   await atomic(join(jobDir,'brief.json'),JSON.stringify(brief,null,2));
   await atomic(join(jobDir,'state.json'),JSON.stringify(state,null,2));
   return jobDir;
@@ -60,6 +60,7 @@ export async function runJob(jobDir,provider,{maxStages=Infinity,onProgress=()=>
     let state=await readJson(join(jobDir,'state.json'));
     if(state.briefHash!==sha256(JSON.stringify(brief)))throw new Error('Brief changed after job creation; refusing untracked mutation');
     if(state.status==='ready_for_owner_review')return state;
+    if(state.status==='needs_attention')return state;
     if(state.status==='published'||state.status==='approved')throw new Error('Autonomous engine cannot approve or publish anything');
     if(state.providerKind && (state.providerKind!==provider.kind || state.model!==provider.model))throw new Error('Cannot resume with a different provider/model; start a new job instead');
     state.providerKind=provider.kind;state.model=provider.model;
@@ -100,12 +101,34 @@ export async function runJob(jobDir,provider,{maxStages=Infinity,onProgress=()=>
           const r=await generate('reviser',`Return JSON {"text":"..."}. REWRITE THE WHOLE SECTION, not comments or a synopsis. SECTION_NUMBER: ${item.sectionIndex+1}. Preserve continuity, names and essential events. Revision objective: ${item.instruction}. Original section: ${original.text}. ${promptContext(brief,state.plan,state.bible)}`);
           const next=checkChapter(r.text);if(next===original.text)throw new Error('Revision made no changes');
           state.revisions.push({sectionId:original.id,reason:item.problem,instruction:item.instruction,before:original.text,after:next});
-          state.sections[item.sectionIndex]={...original,text:next};state.stage='package';await save({message:'Targeted editorial revision completed'});
+          state.sections[item.sectionIndex]={...original,text:next};state.stage='quality';await save({message:'Targeted editorial revision completed; checking quality'});
+        } else if(state.stage==='quality'){
+          const report=inspectDraft(state.sections);
+          const blocking=report.warnings.filter(w=>['HEAVY_REPETITION','PLACEHOLDER_OR_INSTRUCTION_LEAK'].includes(w.code));
+          if(!blocking.length){state.stage='package';await save({message:'Quality blocking checks passed; preparing private review artifact'});}
+          else if((state.qualityRepairAttempts??0)<2&&state.calls<brief.maxCalls){
+            const warning=blocking[0],index=state.sections.findIndex(s=>s.id===warning.sectionId);
+            const original=state.sections[index];
+            if(original.locked){state.status='needs_attention';state.stage='done';state.qa={...report,passed:false,reason:'Locked content failed automatic QA'};await save({message:'Quality check blocked: locked section requires owner attention'});break;}
+            // Count this repair before making the model call; a failed call never loops forever.
+            state.qualityRepairAttempts=(state.qualityRepairAttempts??0)+1;
+            await save({message:`Attempting bounded QA repair ${state.qualityRepairAttempts}/2 for ${original.id}`});
+            const r=await generate('reviser',`Return JSON {"text":"..."} with a COMPLETE revised prose chapter. Fix: ${warning.message}. Do not repeat paragraphs or include task instructions. Keep plot and character continuity. Chapter title: ${original.title}. FULL ORIGINAL: ${original.text}. STORY BIBLE: ${state.bible}. LANGUAGE: ${brief.language}.`);
+            const rewritten=checkChapter(r.text);
+            if(rewritten===original.text){state.status='needs_attention';state.stage='done';state.qa={...report,passed:false,reason:'Automated repair returned unchanged text; owner intervention needed',qualityRepairAttempts:state.qualityRepairAttempts};await save({message:'Repeated content remains; private EPUB withheld'});break;}
+            state.revisions.push({sectionId:original.id,reason:'Automated quality repair',instruction:warning.message,before:original.text,after:rewritten,automatedQaRepair:true});
+            state.sections[index]={...original,text:rewritten};
+            await save({message:`QA repair ${state.qualityRepairAttempts}/2 completed; checking again`});
+          } else {
+            state.status='needs_attention';state.stage='done';state.qa={...report,passed:false,reason:'Blocking quality warnings persist; no EPUB generated',qualityRepairAttempts:state.qualityRepairAttempts??0};
+            await save({message:'Quality warning remains after bounded repair. Owner attention required; publishing unavailable.'});break;
+          }
         } else if(state.stage==='package'){
           const draft={kind:'folilune-studio-draft',schemaVersion:'0.1.0',warning:'Private AI-generated review draft, not a Reader release package.',project:{id:state.id,format:'prose',title:state.plan.title,subtitle:'',language:brief.language,summary:state.plan.summary,storyBible:state.bible,sections:state.sections.map(s=>({id:s.id,role:'chapter',title:s.title,body:{format:'plain-text',text:s.text},artwork:null}))}};
           const check=validateStudioDraft(draft);
           const qa={...inspectDraft(state.sections),schemaValid:check.ok,errors:check.errors,sections:state.sections.length,minimumWords:100,wordCounts:state.sections.map(s=>words(s.text)),revisionCount:state.revisions.length,realReaderVerified:false,epubCheckVerified:false,rightsCleared:false,provider:state.providerKind,model:state.model};
-          qa.passed=qa.schemaValid&&qa.sections===brief.sections&&qa.wordCounts.every(w=>w>=100)&&qa.revisionCount>=1;
+          qa.qualityRepairAttempts=state.qualityRepairAttempts??0;
+          qa.passed=qa.schemaValid&&qa.sections===brief.sections&&qa.wordCounts.every(w=>w>=100)&&qa.revisionCount>=1&&!hasBlockingQualityWarnings(qa);
           await atomic(join(jobDir,'review-draft.json'),JSON.stringify(draft,null,2));
           await atomic(join(jobDir,'qa.json'),JSON.stringify(qa,null,2));
           state.qa=qa;

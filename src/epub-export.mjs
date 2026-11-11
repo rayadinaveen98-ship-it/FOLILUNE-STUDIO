@@ -79,6 +79,7 @@ export function buildExperimentalEpub(draft) {
       const match=/^data:image\/(png|jpeg);base64,([A-Za-z0-9+/]+={0,2})$/.exec(s.artwork.dataUrl||'');
       if(!match)throw new Error('For EPUB export, artwork must be PNG or JPEG; convert WebP first');
       if(match[2].length>2_800_000)throw new Error('Artwork exceeds EPUB proof size limit');
+      if(!s.artwork.altText?.trim())throw new Error('Illustrations need descriptive alt text before EPUB export');
       const raw=bytesFromBase64(match[2]);
       if(!raw.length||raw.length>2*1024*1024)throw new Error('Artwork is invalid or too large');
       const validPng=match[1]==='png'&&raw.length>=24&&[137,80,78,71,13,10,26,10].every((n,i)=>raw[i]===n);

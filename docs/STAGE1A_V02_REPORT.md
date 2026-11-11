@@ -19,7 +19,7 @@
 ## Unverified / blockers
 - No actual Ollama model is installed in the execution environment. Real local-model original story quality, token budgets and running-time reliability remain untested. A stubbed Ollama HTTP adapter was already unit-tested in v0.1.
 - Formal EPUBCheck and exact FOLILUNE Reader rendering are still unverified. EPUBs are private experiments, not releases.
-- The UI was not independently verified against browser accessibility/device matrix in this update. User visual approval and a real-device test remain open.
+- Static HTML/CSS UI layout checks passed at 1440×900, 960×760 and 390×844 using Chromium `set_content`, with no horizontal overflow. Full UI-backend browser interaction was **not** verified: Chromium navigation to local HTTP fails with `ERR_BLOCKED_BY_ADMINISTRATOR` in this environment. Accessibility/device validation remains open.
 - Restart persistence for the earlier standalone Studio and cloud orchestration are not yet verified.
 - No authenticated approval service, public catalog, comic renderer, finished artwork, hosted production, external creator submission or public publishing capability exists.
 - Model-generated text could be inconsistent or inaccurate; deterministic warnings cannot certify editorial quality.

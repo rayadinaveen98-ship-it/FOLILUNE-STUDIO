@@ -4,12 +4,13 @@
 ## Guiding rule
 Build ONE shared orchestrator + rights/approval/release platform, then specialist prose/novel/illustration/comic workers. Reuse existing Studio v0.4 code as an experimental kernel **only after a code audit**. Do not keep adding disconnected prototypes or creating 50 artificial phases. Protect the Reader repo and approved UX. No product milestone is “done” just because code compiled, simulated tests passed or a picture looks good.
 
-### Gate 0 — Master plan and baseline audit (CURRENT)
+### Gate 0 — Master plan and baseline audit (DOCUMENTED; owner review not a production release)
 - Deliverables: master vision, target architecture, quality policy, economics, Reader integration specification, creator future, milestone gates, existing code inventory and known failures.
 - Real current inventory: local v0.4 story pipeline, Ollama adapter, synthetic test provider, idea queue 1–2, local chapter revisions, experimental EPUB. There is no hosted generation service, no automatically deployed daily schedule, no image/comic/novel creator, no authenticated publishing service, no Reader catalog.
 - Exit: owner accepts direction; next implementation stays on the engine path. Architecture documentation complete ≠ functioning service.
 
 ### Gate 1 — Real generation runtime, owner-simple experience
+**Engineering checkpoint v0.5 (2026-11-11):** implemented a private 1–10-slot/day editorial plan, persistent per-date at-most-once reservation journal, synthetic single-process scheduler, and internal server-managed inference adapter with paid-access disabled unless explicitly configured. **NOT delivered:** always-on hosted scheduler, genuine AI generation, provider billing hard caps, secure owner auth, real stories/day or public publishing. 33 Node tests + two local HTTP suites + 3 simulated-browser viewport checks passed. See [Daily Factory v0.5 report](DAILY_FACTORY_V05_REPORT.md).
 **Build:** production-grade persistent job state/worker foundation; server-side managed model gateway with explicit privacy, auth, caps and provider fallback policy; one owner-only dashboard; brief and editorial calendar; provenance; pause/cancel/resume, retry ceilings, hard daily spend limits and kill switch. Do not expose model choices or require Ollama setup in owner UX.
 **Proof:** using REAL inference (not synthetic), create a coherent original story of agreed length in one click without per-section prompts, preserve exact generation artifacts and token/cost/latency trace, recover an interrupted job without duplicate paid stages, handle failures/restarts, and demonstrate no production job exceeding hard caps.
 **Blockers:** operating budget and provider terms, access to managed compute, encryption and authentication setup, real quality evaluation. No unattended processing until owner approves policy and budget.

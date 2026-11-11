@@ -5,7 +5,7 @@ on:
       - 'engine/**'
       - 'src/content-model.mjs'
       - 'src/epub-export.mjs'
-      - 'tests/autonomous.test.mjs'
+      - 'tests/**'
       - 'fixtures/autonomous-brief.json'
       - 'fixtures/autonomy-profile.json'
       - '.github/workflows/studio-autonomy-stage1a.yml'
@@ -21,4 +21,6 @@ jobs:
         with:
           node-version: '22'
       - name: Validate Stage 1A autonomous engine with synthetic provider and local HTTP stub
-        run: node --test tests/autonomous.test.mjs
+        run: node --test
+      - name: Verify real local HTTP creation, review, and publication lockout
+        run: python3 tests/server-integration.py

@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://folilune.example/contracts/publication-manifest/0.1.0",
+  "title": "FOLILUNE Studio Publication Manifest v0.1 — proposal only",
+  "description": "Candidate artifact manifest: release authorization, approvals, compatibility evidence and package digests are external records, never client-provided gates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateId",
+    "publicationId",
+    "workId",
+    "editionId",
+    "editionVersion",
+    "publicationType",
+    "title",
+    "language",
+    "creators",
+    "readingOrder",
+    "requiredCapabilities",
+    "rights"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0.1.0"
+    },
+    "candidateId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publicationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "editionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "editionVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "publicationType": {
+      "enum": [
+        "prose",
+        "illustrated",
+        "comic"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "synopsis": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1
+    },
+    "readingDirection": {
+      "enum": [
+        "ltr",
+        "rtl"
+      ]
+    },
+    "creators": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "role"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "author",
+              "illustrator",
+              "editor",
+              "translator",
+              "letterer",
+              "other"
+            ]
+          }
+        }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rightsBasis",
+        "reviewStatus"
+      ],
+      "properties": {
+        "rightsBasis": {
+          "enum": [
+            "original",
+            "public-domain",
+            "licensed"
+          ]
+        },
+        "reviewStatus": {
+          "enum": [
+            "pending",
+            "cleared",
+            "blocked"
+          ]
+        },
+        "creditLine": {
+          "type": "string"
+        }
+      }
+    },
+    "requiredCapabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "readingOrder": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "href",
+          "mediaType"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "href": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*:)[^?#]+$"
+          },
+          "mediaType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "href",
+          "mediaType",
+          "sha256",
+          "bytes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "href": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*:)[^?#]+$"
+          },
+          "mediaType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "altText": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sourceRevisionDigest": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "buildToolchain": {
+      "type": "string"
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "includesTextAlternatives": {
+          "type": "boolean"
+        },
+        "declaredLanguages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

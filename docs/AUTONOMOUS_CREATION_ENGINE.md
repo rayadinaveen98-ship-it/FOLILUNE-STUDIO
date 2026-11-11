@@ -1,6 +1,6 @@
 # FOLILUNE Studio — Autonomous Creation Engine
 **Status:** Core product direction CONFIRMED by owner; architecture PROPOSED. **2026-11-11**
-**Code status:** NOT IMPLEMENTED. Existing Studio v4 is a manual authoring/EPUB prototype only.
+**Code status:** Stage 1A v0.1 local prose engine, idea queue and synthetic/stub tests IMPLEMENTED. Actual model-generated literary quality, illustrated/comic engine, real approval backend and Reader integration NOT verified or NOT implemented. See [Stage 1A report](STAGE1A_IMPLEMENTATION_REPORT.md).
 
 ## Mission
 The primary capability of FOLILUNE Studio is **automated end-to-end original literary content production**. The system should generate, edit, illustrate, assemble and quality-check works with minimal routine intervention. It may operate from an owner prompt, an approved creative brief or a pre-authorized content schedule. It must NOT publish or grant rights without deliberate authorized review. The owner may choose a single explicit **Approve & Publish** action: the backend records approval for the exact immutable candidate and, only if all gates still pass, atomically publishes it. **Approve for later** leaves publication pending.

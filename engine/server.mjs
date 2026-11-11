@@ -9,6 +9,8 @@ import {validateProfile,runAuthorizedBatch} from './auto-queue.mjs';
 import {ollamaProvider,simulatedProvider} from './providers.mjs';
 import {listLocalModels,requireInstalledModel} from './model-preflight.mjs';
 import {requestOwnerRevision,setSectionLock} from './review.mjs';
+import {validateDailyPolicy,planDailySlots,localDate,readDailyJournal} from './daily-factory.mjs';
+import {managedProviderStatus} from './managed-provider.mjs';
 
 const port=Number(process.env.FOLILUNE_PORT || 44831);
 if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('Invalid FOLILUNE_PORT');
@@ -44,6 +46,14 @@ const server=createServer(async(req,res)=>{
     if(req.method==='GET'&&path==='/api/models'){
       try{return respond(res,200,{...(await listLocalModels()),localOnly:true});}
       catch(e){return respond(res,503,{available:false,models:[],error:e.message,localOnly:true});}
+    }
+    if(req.method==='GET'&&path==='/api/factory/plan'){
+      const policy=validateDailyPolicy(JSON.parse(await readFile(fileURLToPath(new URL('../fixtures/daily-policy.example.json',import.meta.url)),'utf8')));
+      const date=localDate(policy.timezone);
+      const plan=planDailySlots(policy,date);
+      const journal=await readDailyJournal(root,date);
+      return respond(res,200,{plan,journal,engine:managedProviderStatus(),publishingEnabled:false,liveDailyProductionEnabled:false,
+        message:'Private editorial planning only. Factory schedule defaults OFF; live paid daily production and Reader publishing are not enabled.'});
     }
     if(req.method==='GET'&&path==='/api/queue'){
       return respond(res,200,{...queueState,history:await queueHistory(),publishingEnabled:false});

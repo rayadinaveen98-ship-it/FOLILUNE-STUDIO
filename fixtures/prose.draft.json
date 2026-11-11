@@ -1,0 +1,36 @@
+{
+  "kind": "folilune-studio-draft",
+  "schemaVersion": "0.1.0",
+  "warning": "Private authoring interchange only. Not a Reader publication package.",
+  "project": {
+    "id": "fixture-work-prose",
+    "format": "prose",
+    "title": "The Lantern at Dawn",
+    "subtitle": "",
+    "language": "en",
+    "summary": "Original demo about a lantern on a quiet hill.",
+    "storyBible": "Original fictional characters and settings.",
+    "sections": [
+      {
+        "id": "prose-section-1",
+        "role": "chapter",
+        "title": "The hill",
+        "body": {
+          "format": "plain-text",
+          "text": "Mira reached the quiet hill before sunrise."
+        },
+        "artwork": null
+      },
+      {
+        "id": "prose-section-2",
+        "role": "chapter",
+        "title": "A signal",
+        "body": {
+          "format": "plain-text",
+          "text": "A warm light flickered through the mist."
+        },
+        "artwork": null
+      }
+    ]
+  }
+}

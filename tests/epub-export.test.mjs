@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {buildExperimentalEpub} from '../src/epub-export.mjs';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const fixture=n=>JSON.parse(readFileSync(path.join(root,'fixtures',n+'.draft.json'),'utf8'));
+const prose=fixture('prose'),ill=fixture('illustrated'),comic=fixture('comic');
+const checks=[];
+function check(label,fn){fn();checks.push(label);console.log('PASS',label)}
+const output=path.join(root,'test-artifacts');mkdirSync(output,{recursive:true});
+let a,b;
+check('Prose ZIP',()=>{a=buildExperimentalEpub(prose);assert.ok(a.length>1000);writeFileSync(path.join(output,'prose.epub'),a)});
+check('Telugu illustrated ZIP',()=>{b=buildExperimentalEpub(ill);assert.ok(b.length>1000);writeFileSync(path.join(output,'illustrated.epub'),b)});
+check('Deterministic export',()=>assert.deepEqual(buildExperimentalEpub(prose),a));
+check('Comics explicitly rejected',()=>assert.throws(()=>buildExperimentalEpub(comic),/only prose and illustrated/));
+check('Duplicate section IDs rejected',()=>{const x=structuredClone(prose);x.project.sections[1].id=x.project.sections[0].id;assert.throws(()=>buildExperimentalEpub(x),/Duplicate/)});
+check('Invalid language rejected',()=>{const x=structuredClone(prose);x.project.language='<script>';assert.throws(()=>buildExperimentalEpub(x),/Language/)});
+check('WebP rejected',()=>{const x=structuredClone(ill);x.project.sections[0].artwork.dataUrl='data:image/webp;base64,UklGRg==';assert.throws(()=>buildExperimentalEpub(x),/PNG or JPEG/)});
+check('Invalid JPEG bytes rejected',()=>{const x=structuredClone(ill);x.project.sections[0].artwork.dataUrl='data:image/jpeg;base64,AAAA';assert.throws(()=>buildExperimentalEpub(x),/do not match/)});
+check('Markup is treated as text',()=>{const x=structuredClone(prose);x.project.sections[0].body.text='<script>alert(1)</script> & text';assert.ok(buildExperimentalEpub(x).length>1000)});
+console.log('PASS '+checks.length+'/9 packager unit checks');

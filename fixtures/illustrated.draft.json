@@ -1,0 +1,44 @@
+{
+  "kind": "folilune-studio-draft",
+  "schemaVersion": "0.1.0",
+  "warning": "Private authoring interchange only. Not a Reader publication package.",
+  "project": {
+    "id": "fixture-work-illustrated",
+    "format": "illustrated",
+    "title": "చిన్న దీపం",
+    "subtitle": "",
+    "language": "te",
+    "summary": "An original illustrated fable in Telugu.",
+    "storyBible": "Original fictional characters and settings.",
+    "sections": [
+      {
+        "id": "illustrated-section-1",
+        "role": "spread",
+        "title": "మొదటి పుట",
+        "body": {
+          "format": "plain-text",
+          "text": "ఒక చిన్న దీపం చీకటిలో వెలిగింది."
+        },
+        "artwork": {
+          "id": "illustrated-section-1:artwork",
+          "dataUrl": "data:image/png;base64,iVBORw0KGgo=",
+          "altText": ""
+        }
+      },
+      {
+        "id": "illustrated-section-2",
+        "role": "spread",
+        "title": "రెండవ పుట",
+        "body": {
+          "format": "plain-text",
+          "text": "దాని వెలుగు దారిని చూపించింది."
+        },
+        "artwork": {
+          "id": "illustrated-section-2:artwork",
+          "dataUrl": "data:image/png;base64,iVBORw0KGgo=",
+          "altText": ""
+        }
+      }
+    ]
+  }
+}
